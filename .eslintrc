@@ -1,0 +1,22 @@
+parser: babel-eslint
+
+parserOptions:
+  sourceType: module
+
+env:
+  es6: true
+  node: true
+
+extends:
+  "eslint:recommended"
+
+rules:
+  no-cond-assign: 0
+  no-floating-decimal: 2
+  semi: 2
+
+globals:
+    describe: true
+    expect: true
+    beforeEach: true
+    it: true

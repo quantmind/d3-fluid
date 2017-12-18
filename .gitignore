@@ -1,0 +1,8 @@
+#
+# javascript
+node_modules
+build
+
+#
+# files
+.DS_Store
