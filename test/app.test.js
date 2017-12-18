@@ -1,11 +1,13 @@
 import request from "supertest";
-import app from "../src/app/app";
+import createApp from "../src/core/app";
 
 
 describe('Test the root path', () => {
 
-    test('It should response the GET method', async () => {
+    var app = createApp();
 
+    test('It should response the GET method', () => {
+        expect(app).toBeTruthy();
     });
 
 

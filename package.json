@@ -56,7 +56,7 @@
     },
     "scripts": {
         "lint": "eslint *.js test src",
-        "test": "jest ./test/test-app.js",
+        "test": "jest",
         "test-require": "./bin/view-require -h",
         "rollup": "rollup -c --banner \"$(preamble)\" && chmod +x bin/view-require",
         "dev": "rollup -c -w",

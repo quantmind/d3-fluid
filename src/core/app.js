@@ -1,6 +1,6 @@
 const
     express = require('express'),
-    markdown = require('../plugins/markdown');
+    markdown = require('../plugins/markdown'),
     sitemap = require('../plugins/sitemap');
 
 
