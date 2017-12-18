@@ -31,7 +31,7 @@ tcpPortUsed.check(port, 'localhost').then(inUse => {
     } else {
         const
             config = cfg.readConfig(configFile),
-            server = require('./app/server.js');
+            server = require('./core/server.js');
         server(config, port);
     }
 }).catch(err => {
