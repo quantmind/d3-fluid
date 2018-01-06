@@ -6,6 +6,9 @@ module.exports = {
     markdown: {
         docs: {
             path: "docs/"
+        },
+        plugins: {
+
         }
     }
 };

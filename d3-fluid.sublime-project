@@ -7,6 +7,9 @@
 	],
     "settings":
     {
-        "index_exclude_patterns" : ["node_modules/*"]
+        "index_exclude_patterns":
+        [
+            "node_modules/*",
+        ]
     }
 }
