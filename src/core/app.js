@@ -10,7 +10,7 @@ export default function (config) {
 
     const app = express();
 
-    app.use('/static')
+    app.use('/static', express.static('static'));
     algolia(app, config);
     sitemap(app, config);
     markdown(app, config);

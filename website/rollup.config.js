@@ -1,11 +1,11 @@
-import json from 'rollup-plugin-json';
 import babel from 'rollup-plugin-babel';
-
-const externals = Object.keys(dependencies);
+import json from 'rollup-plugin-json';
+import resolve from 'rollup-plugin-node-resolve';
 
 
 export default {
     input: 'index.js',
+    external: ['d3-let', 'd3-view', 'highlightjs', 'remarkable'],
     output: {
         format: 'umd',
         extend: true,
@@ -17,5 +17,13 @@ export default {
             'highlightjs': 'highlightjs',
             'remarkable': 'remarkable'
         }
-    }
+    },
+    plugins: [
+        json(),
+        resolve(),
+        babel({
+            babelrc: false,
+            presets: ['es2015-rollup']
+        })
+    ]
 };

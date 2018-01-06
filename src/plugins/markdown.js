@@ -26,6 +26,12 @@ export default function (app, siteConfig) {
 
 
 function docTemplate (ctx) {
+    const css = ctx.stylesheets.map(stylesheet => {
+        return `<link href="${stylesheet}" media="all" rel="stylesheet" />`;
+    }).join('\n');
+    const scripts = ctx.scripts.map(script => {
+        return `<script src="${script}"></script>`;
+    }).join('\n');
 
     return (`
         <!DOCTYPE html>
@@ -35,13 +41,13 @@ function docTemplate (ctx) {
             <meta charset="utf-8">
             <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
             <meta name="viewport" content="width=device-width, initial-scale=1">
-            <link href="/static/admin.css" media="all" rel="stylesheet" />
+            ${css}
         </head>
         <body>
             <div id="root">
                 <markdown>${ctx.content}</markdown>
             </div>
-            <script src="/static/d3fluid.js"></script>
+            ${scripts}
         </body>
         </html>
     `);
@@ -84,7 +90,9 @@ function markdown (cfg, plugins, siteConfig) {
             }
         }
 
-        const ctx = extractMetadata(readFileSync(file, 'utf8'));
+        const ctx = Object.assign(
+            {}, siteConfig, extractMetadata(readFileSync(file, 'utf8'))
+        );
 
         // generate table of contents if appropriate
         if (ctx.content && ctx.content.indexOf(TABLE_OF_CONTENTS_TOKEN) !== -1) {

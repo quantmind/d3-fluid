@@ -25,7 +25,7 @@ export default [
         ]
     },
     {
-        input: 'src/script/index.js',
+        input: 'index.js',
         external: ['d3-let', 'd3-view', 'highlightjs', 'remarkable'],
         output: {
             format: 'umd',

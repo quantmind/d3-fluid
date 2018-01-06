@@ -5,6 +5,11 @@ import logger from './utils/logger';
 
 const CWD = process.cwd();
 
+const defaults = {
+    scripts: ['/static/site.js'],
+    stylesheets: ['/static/site.css']
+}
+
 
 export default function (file) {
     const filePath = `${CWD}/${file}`;
@@ -14,7 +19,7 @@ export default function (file) {
     } else {
         var cfg = Object.assign({
             PATH: dirname(filePath),
-        }, require(filePath));
+        }, defaults, require(filePath));
         logger.debug(JSON.stringify(cfg, null, 4));
         return cfg;
     }
