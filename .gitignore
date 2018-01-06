@@ -3,6 +3,7 @@
 node_modules
 bin
 build
+website/static
 
 #
 # files

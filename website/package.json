@@ -1,0 +1,15 @@
+{
+    "scripts": {
+        "js": "rollup -c",
+        "css": "node-sass index.scss static/site.css --include-path node_modules --output-style compressed",
+        "serve": "nodemon ../bin/d3fluid"
+    },
+    "dependencies": {
+        "d3-fluid": "../../d3-fluid/"
+    },
+    "devDependencies": {
+        "nodemon": "1.14",
+        "node-sass": "4.7",
+        "rollup": "0.53"
+    }
+}

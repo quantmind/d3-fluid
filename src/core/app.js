@@ -10,14 +10,10 @@ export default function (config) {
 
     const app = express();
 
+    app.use('/static')
     algolia(app, config);
-    markdown(app, config);
     sitemap(app, config);
-
-    app.get('/', (req, res) => {
-        res.status(200).send('Hello World!');
-    });
-
+    markdown(app, config);
 
     return app;
 

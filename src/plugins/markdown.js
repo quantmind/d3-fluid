@@ -1,9 +1,10 @@
-import {viewSlugify} from 'd3-view';
 import express from 'express';
 import {join} from 'path';
 import {existsSync, readFileSync} from 'fs';
 import {JSDOM} from 'jsdom';
+import {viewSlugify} from 'd3-view';
 
+import logger from '../utils/logger';
 import extractMetadata from '../utils/meta';
 
 //
@@ -12,15 +13,13 @@ import extractMetadata from '../utils/meta';
 
 export default function (app, siteConfig) {
     if (!siteConfig.markdown) return;
-    const plugins = siteConfig.markdown.plugins;
+    const
+        plugins = siteConfig.markdown.plugins,
+        paths = siteConfig.markdown.paths || [];
 
-    Object.keys(siteConfig.markdown).forEach(key => {
-
-        if (key !== 'plugins') {
-            const path = viewSlugify(key);
-            app.use('/${path}', markdown(key, siteConfig.markdown[key], plugins, siteConfig));
-        }
-
+    paths.forEach(cfg => {
+        const slug = cfg.slug || '';
+        app.use(`/${slug}`, markdown(cfg, plugins, siteConfig));
     });
 
 }
@@ -31,7 +30,7 @@ function docTemplate (ctx) {
     return (`
         <!DOCTYPE html>
         <html>
-        <head>
+        <head data-meta='${ctx.metadata}'>
             <title>${ctx.title}</title>
             <meta charset="utf-8">
             <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -39,10 +38,10 @@ function docTemplate (ctx) {
             <link href="/static/admin.css" media="all" rel="stylesheet" />
         </head>
         <body>
-            <div id="root" d3-meta='${ctx.metadata}'>
-                <marked>${ctx.content}</marked>
+            <div id="root">
+                <markdown>${ctx.content}</markdown>
             </div>
-            <script src="/static/admin.js"></script>
+            <script src="/static/d3fluid.js"></script>
         </body>
         </html>
     `);
@@ -59,14 +58,23 @@ function renderDoc (ctx) {
 }
 
 
-function markdown (key, config, plugins, siteConfig) {
-    plugins = [].concat(plugins || []);
-    if (config.plugins) plugins = plugins.concat(config.plugins);
+function markdown (cfg, plugins, siteConfig) {
 
     const app = express();
 
+    app.get('/', (req, res, next) => {
+        tryFile('index', res, next);
+    });
+
     app.get('/:name', (req, res, next) => {
-        let file = join(key, req.params.name);
+        tryFile(req.params.name, res, next);
+    });
+
+    return app;
+
+    function tryFile (name, res, next) {
+        let file = join(siteConfig.PATH, cfg.path + name);
+        logger.debug(`try loading from "${file}"`);
 
         if (!existsSync(file)) {
             file = `${file}.md`;
@@ -76,15 +84,15 @@ function markdown (key, config, plugins, siteConfig) {
             }
         }
 
-        let ctx = extractMetadata(readFileSync(file, 'utf8'));
+        const ctx = extractMetadata(readFileSync(file, 'utf8'));
 
         // generate table of contents if appropriate
-        if (ctx.content && raw.content.indexOf(TABLE_OF_CONTENTS_TOKEN) !== -1) {
-            ctx.content = insertTableOfContents(raw.content);
+        if (ctx.content && ctx.content.indexOf(TABLE_OF_CONTENTS_TOKEN) !== -1) {
+            ctx.content = insertTableOfContents(ctx.content);
         }
 
-        return app.send(renderDoc(ctx));
-    });
+        return res.send(renderDoc(ctx));
+    }
 }
 
 
@@ -100,7 +108,7 @@ function insertTableOfContents (rawContent) {
     }
 
     const tableOfContents = headers
-      .map(header => `  - [${header}](#${toSlug(header)})`)
+      .map(header => `  - [${header}](#${viewSlugify(header)})`)
       .join('\n');
 
     return rawContent.replace(TABLE_OF_CONTENTS_TOKEN, tableOfContents);

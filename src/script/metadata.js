@@ -1,16 +1,28 @@
+import {assign} from 'd3-let';
 
 
 export default {
 
-    refresh (model, meta) {
-        var head = this.select('head');
-        Object.keys(meta).forEach(key => {
-            meta = metaHandlers[key] || metaHandlers.content;
-            meta(head, key, meta[key]);
-        });
+    install (vm, metadata) {
+        metadata = assign(metadata || {}, this.select('head').attr('data-meta'));
+        vm.model.metadata = metadata;
+        vm.events.on('mounted.metadata', bindMeta);
     }
 };
 
+
+function bindMeta (vm) {
+    var head = vm.select('head');
+
+    vm.model.metadata.$on(() => {
+        let meta;
+        var data = vm.model.metadata.$data();
+        Object.keys(data).forEach(key => {
+            meta = metaHandlers[key] || metaHandlers.content;
+            meta(head, key, data[key]);
+        });
+    });
+}
 
 
 const metaHandlers = {

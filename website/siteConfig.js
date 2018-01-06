@@ -4,9 +4,16 @@ module.exports = {
         apiKey: process.env.ALGOLIA_API_KEY
     },
     markdown: {
-        docs: {
-            path: "docs/"
-        },
+        "paths": [
+            {
+                slug: "docs",
+                path: "docs/"
+            },
+            {
+                slug: "",
+                path: "/"
+            }
+        ],
         plugins: {
 
         }

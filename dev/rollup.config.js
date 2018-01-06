@@ -26,13 +26,14 @@ export default [
     },
     {
         input: 'src/script/index.js',
-        external: ['d3-view', 'highlightjs', 'remarkable'],
+        external: ['d3-let', 'd3-view', 'highlightjs', 'remarkable'],
         output: {
             format: 'umd',
             extend: true,
             file: 'build/d3-fluid.js',
             name: 'd3',
             globals: {
+                'd3-let': 'd3',
                 'd3-view': 'd3',
                 'highlightjs': 'highlightjs',
                 'remarkable': 'remarkable'
