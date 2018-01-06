@@ -1,7 +1,8 @@
 {
     "version": "0.2.0",
     "name": "d3-fluid",
-    "description": "d3-express server",
+    "title": "d3-fluid - micro web framework with d3-view and express",
+    "description": "Micro web framework with d3-view and express",
     "author": {
         "name": "quantmind.com",
         "email": "message@quantmind.com"
@@ -25,15 +26,15 @@
         "fluid-start": "./src/serve.js"
     },
     "dependencies": {
-        "chalk": "2.3",
         "commander": "2.12",
         "d3-view": "1.1",
         "express": "4.16",
+        "morgan": "1.9",
         "tcp-port-used": "0.1"
     },
     "devDependencies": {
         "babel-core": "6.26",
-        "babel-eslint": "8.0",
+        "babel-eslint": "8.1",
         "babel-plugin-external-helpers": "6.22",
         "babel-plugin-istanbul": "4.1",
         "babel-polyfill": "6.26",
@@ -41,11 +42,11 @@
         "babel-preset-es2015-rollup": "3.0",
         "babelify": "8.0",
         "commander": "2.12",
-        "eslint": "4.13",
+        "eslint": "4.14",
         "handlebars": "4",
         "jest": "22.0",
         "publish": "0.6",
-        "rollup": "0.52",
+        "rollup": "0.53",
         "rollup-plugin-babel": "3.0",
         "rollup-plugin-commonjs": "8.2",
         "rollup-plugin-json": "2.3",
@@ -55,18 +56,11 @@
         "supertest": "3.0"
     },
     "scripts": {
-        "lint": "eslint *.js test src",
+        "lint": "eslint dev test src",
         "test": "jest",
-        "test-require": "./bin/view-require -h",
-        "rollup": "rollup -c --banner \"$(preamble)\" && chmod +x bin/view-require",
-        "dev": "rollup -c -w",
-        "cover": "karma start test/karma/karma.cover.js",
-        "build": "npm run-script rollup && uglifyjs --preamble \"$(preamble)\" build/d3-view.js -c -m -o build/d3-view.min.js",
-        "unit": "karma start test/karma/karma.unit.js",
-        "debug": "karma start test/karma/karma.debug.js",
-        "debug:firefox": "karma start test/karma/karma.debug.firefox.js",
-        "debug:safari": "karma start test/karma/karma.debug.safari.js",
-        "docs": "doctoc docs/",
+        "rollup": "rollup -c dev/rollup.config.js && chmod +x bin/d3fluid",
+        "dev": "rollup -c dev/rollup.config.js -w",
+        "prepare": "npm run-script rollup",
         "asset": "cd build && POST https://<upload_url>/repos/quantmind/d3-view/releases/:id/assets?name=d3-view.zip",
         "postpublish": "VERSION=`node -e 'console.log(require(\"./package.json\").version)'`; git push && git tag -am \"Release $VERSION.\" v${VERSION} && git push --tags && mkdir -p ../giottojs.org/latest && mkdir -p ../giottojs.org/d3-view/${VERSION} && cp build/* ../giottojs.org/d3-view/${VERSION}/ && cp build/* ../giottojs.org/latest/ && cd ../giottojs.org && git add d3-view/${VERSION} latest && git commit -a -m \"d3-view ${VERSION}\" && git push",
         "release": "publish"

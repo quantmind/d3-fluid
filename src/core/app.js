@@ -1,13 +1,16 @@
-const
-    express = require('express'),
-    markdown = require('../plugins/markdown'),
-    sitemap = require('../plugins/sitemap');
+import express from 'express';
+
+import markdown from '../plugins/markdown';
+import sitemap from '../plugins/sitemap';
+import algolia from '../plugins/algolia';
 
 
-module.exports = function (config) {
+export default function (config) {
+    if (!config) config = {};
 
     const app = express();
 
+    algolia(app, config);
     markdown(app, config);
     sitemap(app, config);
 
@@ -18,4 +21,4 @@ module.exports = function (config) {
 
     return app;
 
-};
+}

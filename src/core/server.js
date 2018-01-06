@@ -1,12 +1,12 @@
-const logger = require('console');
-const createApp = require('./app');
+import logger from 'console';
+import createApp from './app';
 
 //
 // Serve the express app
-module.exports = function (config, port) {
+export default function (config, port) {
     const app = createApp(config);
 
     app.listen(port, () => {
-        logger.log(`Starting d3-fluid server on port ${port}`);
+        logger.log(`Starting d3fluid server on port ${port}`);
     });
-};
+}

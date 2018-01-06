@@ -2,6 +2,6 @@
 //  Generate static files
 
 
-module.exports = function (config) {
+export default function (config) {
 
-};
+}

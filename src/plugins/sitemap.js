@@ -3,6 +3,6 @@
 //    sitemap = require('sitemap');
 
 
-module.exports = function (app, config) {
+export default function(app, config) {
 
-};
+}

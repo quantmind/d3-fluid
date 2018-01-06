@@ -1,17 +1,14 @@
-#!/usr/bin/env node
-'use strict';
+import command from 'commander';
+import logger from 'console';
+import tcpPortUsed from 'tcp-port-used';
 
-// initial check that required files are present
-const
-    tcpPortUsed = require('tcp-port-used'),
-    logger = require('console'),
-    command = require('commander'),
-    pckg = require('../package.json'),
-    cfg = require('./config');
+import {version} from '../package.json';
+import server from './core/server.js';
+import readConfig from './config.js';
 
 
 command
-    .version(pckg.version)
+    .version(version)
     .usage("[options] [file]")
     .description("starts d3-fluid web server")
     .option('-p, --port <number>', 'Specify port number', 9020)
@@ -29,9 +26,7 @@ tcpPortUsed.check(port, 'localhost').then(inUse => {
         logger.error(`Port ${port} is in use`);
         process.exit(1);
     } else {
-        const
-            config = cfg.readConfig(configFile),
-            server = require('./core/server.js');
+        const config = readConfig(configFile);
         server(config, port);
     }
 }).catch(err => {
