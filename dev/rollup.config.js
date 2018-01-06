@@ -23,5 +23,28 @@ export default [
                 presets: ['es2015-rollup']
             })
         ]
+    },
+    {
+        input: 'src/script/index.js',
+        external: ['d3-view', 'highlightjs', 'remarkable'],
+        output: {
+            format: 'umd',
+            extend: true,
+            file: 'build/d3-fluid.js',
+            name: 'd3',
+            globals: {
+                'd3-view': 'd3',
+                'highlightjs': 'highlightjs',
+                'remarkable': 'remarkable'
+            }
+        },
+        plugins: [
+            json(),
+            babel({
+                babelrc: false,
+                runtimeHelpers: true,
+                presets: ['es2015-rollup']
+            })
+        ]
     }
 ];

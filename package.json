@@ -28,9 +28,12 @@
     "dependencies": {
         "commander": "2.12",
         "d3-view": "1.1",
+        "jsdom": "11.5",
         "express": "4.16",
         "morgan": "1.9",
-        "tcp-port-used": "0.1"
+        "tcp-port-used": "0.1",
+        "remarkable": "1.7",
+        "highlightjs": "9.10"
     },
     "devDependencies": {
         "babel-core": "6.26",
