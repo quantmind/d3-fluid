@@ -4,7 +4,7 @@ import {assign} from 'd3-let';
 export default {
 
     install (vm, metadata) {
-        metadata = assign(metadata || {}, this.select('head').attr('data-meta'));
+        metadata = assign(metadata || {}, vm.select('head').attr('data-meta'));
         vm.model.metadata = metadata;
         vm.events.on('mounted.metadata', bindMeta);
     }
