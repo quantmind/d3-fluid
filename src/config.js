@@ -5,6 +5,7 @@ import logger from './utils/logger';
 
 const CWD = process.cwd();
 
+
 const defaults = {
     scripts: ['/static/site.js'],
     stylesheets: ['/static/site.css']

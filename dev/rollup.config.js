@@ -26,7 +26,7 @@ export default [
     },
     {
         input: 'index.js',
-        external: ['d3-let', 'd3-view', 'highlightjs', 'remarkable'],
+        external: ['d3-let', 'd3-view', 'd3-view-components', 'handlebars', 'highlightjs', 'remarkable'],
         output: {
             format: 'umd',
             extend: true,
@@ -35,6 +35,8 @@ export default [
             globals: {
                 'd3-let': 'd3',
                 'd3-view': 'd3',
+                'd3-view-components': 'd3',
+                'handlebars': 'handlebars',
                 'highlightjs': 'highlightjs',
                 'remarkable': 'remarkable'
             }

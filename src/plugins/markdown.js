@@ -1,11 +1,14 @@
 import express from 'express';
 import {join} from 'path';
 import {existsSync, readFileSync} from 'fs';
+import {compile} from 'handlebars';
+
 // import {JSDOM} from 'jsdom';
 import {viewSlugify} from 'd3-view';
 
 import logger from '../utils/logger';
 import extractMetadata from '../utils/meta';
+import {templates} from '../templates/index';
 
 //
 //  Serve markdown pages matching a pattern
@@ -32,6 +35,9 @@ function docTemplate (ctx) {
     const scripts = ctx.scripts.map(script => {
         return `<script src="${script}"></script>`;
     }).join('\n');
+    const template = ctx.template ? templates[ctx.template] : null;
+
+    if (template) ctx.content = template(ctx);
 
     return (`
         <!DOCTYPE html>
@@ -45,7 +51,7 @@ function docTemplate (ctx) {
         </head>
         <body>
             <div id="root">
-                <markdown>${ctx.content}</markdown>
+                ${ctx.content}
             </div>
             ${scripts}
         </body>
@@ -68,6 +74,9 @@ function renderDoc (ctx) {
 function markdown (cfg, plugins, siteConfig) {
 
     const app = express();
+    const ctx = Object.assign({}, siteConfig, cfg);
+    delete ctx.markdown;
+    delete ctx.plugins;
 
     app.get('/', (req, res, next) => {
         tryFile('index', res, next);
@@ -76,6 +85,8 @@ function markdown (cfg, plugins, siteConfig) {
     app.get('/:name', (req, res, next) => {
         tryFile(req.params.name, res, next);
     });
+
+    logger.info(`Markdown micro-site\n${JSON.stringify(ctx, null, 4)}`);
 
     return app;
 
@@ -91,16 +102,19 @@ function markdown (cfg, plugins, siteConfig) {
             }
         }
 
-        const ctx = Object.assign(
-            {}, siteConfig, extractMetadata(readFileSync(file, 'utf8'))
+        const context = Object.assign(
+            {}, ctx, extractMetadata(readFileSync(file, 'utf8'))
         );
 
         // generate table of contents if appropriate
-        if (ctx.content && ctx.content.indexOf(TABLE_OF_CONTENTS_TOKEN) !== -1) {
-            ctx.content = insertTableOfContents(ctx.content);
+        if (context.content) {
+            context.content = compile(context.content)(context);
+
+            if (context.content.indexOf(TABLE_OF_CONTENTS_TOKEN) !== -1)
+                context.content = insertTableOfContents(context.content);
         }
 
-        return res.send(renderDoc(ctx));
+        return res.send(renderDoc(context));
     }
 }
 
