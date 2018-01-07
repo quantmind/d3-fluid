@@ -2,19 +2,19 @@ import request from "supertest";
 import createApp from "../src/core/app";
 
 
-describe('Test the root path', () => {
+describe('Test app', () => {
 
     var app = createApp();
 
-    test('It should response the GET method', () => {
+    test('meta', () => {
         expect(app).toBeTruthy();
     });
 
 
-    test('It should response the GET method', async () => {
+    test('404', async () => {
 
         var response = await request(app).get('/');
-        expect(response.statusCode).toBe(200);
+        expect(response.statusCode).toBe(404);
     });
 
 });

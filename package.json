@@ -62,7 +62,8 @@
     },
     "scripts": {
         "lint": "eslint dev test src",
-        "test": "jest",
+        "unit": "jest",
+        "test": "npm run-script lint && npm run-script unit",
         "rollup": "rollup -c dev/rollup.config.js && chmod +x bin/d3fluid",
         "dev": "rollup -c dev/rollup.config.js -w",
         "prepare": "npm run-script rollup",
