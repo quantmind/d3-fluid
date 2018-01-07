@@ -12,20 +12,20 @@ jobs:
         - run:
             name: test
             command: yarn test
-  elease:
-        docker:
-          - image: circleci/node
-        steps:
-          - checkout
-          - run:
-              name: install
-              command: yarn install
-          - run:
-              name: authenticate
-              command: .circleci/authenticate.sh
-          - run:
-              name: release
-              command: npm run-script release
+  release:
+    docker:
+      - image: circleci/node
+    steps:
+      - checkout
+      - run:
+          name: install
+          command: yarn install
+      - run:
+          name: authenticate
+          command: .circleci/authenticate.sh
+      - run:
+          name: release
+          command: npm run-script release
 
 workflows:
   version: 2

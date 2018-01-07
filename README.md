@@ -1,5 +1,7 @@
 # d3-fluid
 
+[![CircleCI](https://circleci.com/gh/quantmind/d3-fluid.svg?style=svg)](https://circleci.com/gh/quantmind/d3-fluid)
+
 Web framework with [expressjs][] and [d3-view][].
 
 
