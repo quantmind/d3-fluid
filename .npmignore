@@ -1,0 +1,9 @@
+dev
+website
+test
+.circleci
+.idea
+*.sublime-project
+*.log
+*.lock
+.eslintrc

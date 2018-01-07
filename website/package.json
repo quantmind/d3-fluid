@@ -2,18 +2,16 @@
     "scripts": {
         "js": "view-require -c src/require.config.js",
         "css": "node-sass src/index.scss static/site.css --include-path node_modules --output-style compressed",
-        "serve": "nodemon ../bin/d3fluid -w ../bin/d3fluid"
+        "build": "npm run-script js && npm run-script css",
+        "serve": "nodemon -w ../bin/d3fluid ../bin/d3fluid --debug"
     },
     "dependencies": {
-        "d3-fluid": "0.1"
+        "d3-fluid": "0.2",
+        "d3-view": "1.1"
     },
     "devDependencies": {
         "bootstrap": "4.0.0-beta.2",
-        "nodemon": "1.14",
         "node-sass": "4.7",
-        "rollup": "0.53",
-        "rollup-plugin-babel": "3.0",
-        "rollup-plugin-json": "2.3",
-        "rollup-plugin-node-resolve": "3.0"
+        "nodemon": "1.14"
     }
 }

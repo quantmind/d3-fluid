@@ -1,5 +1,5 @@
 {
-    "version": "0.2.0",
+    "version": "0.2.1",
     "name": "d3-fluid",
     "title": "d3-fluid - micro web framework with d3-view and express",
     "description": "Micro web framework with d3-view and express",
@@ -61,13 +61,12 @@
         "supertest": "3.0"
     },
     "scripts": {
-        "lint": "eslint dev test src",
+        "lint": "eslint dev test src website/src",
         "unit": "jest",
         "test": "npm run-script lint && npm run-script unit",
         "rollup": "rollup -c dev/rollup.config.js && chmod +x bin/d3fluid",
         "dev": "rollup -c dev/rollup.config.js -w",
-        "prepare": "npm run-script rollup",
-        "asset": "cd build && POST https://<upload_url>/repos/quantmind/d3-view/releases/:id/assets?name=d3-view.zip",
+        "prepublish": "npm run-script rollup",
         "postpublish": "VERSION=`node -e 'console.log(require(\"./package.json\").version)'`; git push && git tag -am \"Release $VERSION.\" v${VERSION} && git push --tags && mkdir -p ../giottojs.org/latest && mkdir -p ../giottojs.org/d3-view/${VERSION} && cp build/* ../giottojs.org/d3-view/${VERSION}/ && cp build/* ../giottojs.org/latest/ && cd ../giottojs.org && git add d3-view/${VERSION} latest && git commit -a -m \"d3-view ${VERSION}\" && git push",
         "release": "publish"
     }

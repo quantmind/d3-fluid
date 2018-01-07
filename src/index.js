@@ -15,14 +15,14 @@ command
     .option('-p, --port <number>', 'Specify port number', 9020)
     .option('-c, --config <file>', 'Specify config file', 'siteConfig.js')
     .option("-s, --silent", "silent - log errors only", false)
-    .option("--verbose", "verbose - log debug information", false)
+    .option("--debug", "verbose - log debug information", false)
     .parse(process.argv);
 
 
 const configFile = command.config;
 const port = parseInt(command.port, 10) || 9020;
 
-logger.debugEnabled = command.verbose;
+logger.debugEnabled = command.debug;
 
 
 tcpPortUsed.check(port, 'localhost').then(inUse => {
