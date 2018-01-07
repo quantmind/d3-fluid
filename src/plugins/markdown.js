@@ -1,7 +1,7 @@
 import express from 'express';
 import {join} from 'path';
 import {existsSync, readFileSync} from 'fs';
-import {JSDOM} from 'jsdom';
+// import {JSDOM} from 'jsdom';
 import {viewSlugify} from 'd3-view';
 
 import logger from '../utils/logger';
@@ -56,11 +56,12 @@ function docTemplate (ctx) {
 
 function renderDoc (ctx) {
     ctx.metadata = JSON.stringify(ctx.metadata);
-    const dom = new JSDOM(
-        docTemplate(ctx),
-        {runScripts: "dangerously"}
-    );
-    return dom.serialize();
+    return docTemplate(ctx);
+    //const dom = new JSDOM(
+    //    docTemplate(ctx),
+    //    {runScripts: "dangerously"}
+    //);
+    //return dom.serialize();
 }
 
 

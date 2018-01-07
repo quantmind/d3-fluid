@@ -23,7 +23,7 @@
     "module": "index",
     "jsnext:main": "index",
     "bin": {
-        "fluid-start": "./src/serve.js"
+        "d3fluid": "bin/d3fluid"
     },
     "dependencies": {
         "commander": "2.12",

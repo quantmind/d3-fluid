@@ -1,7 +1,7 @@
 {
     "scripts": {
-        "js": "rollup -c",
-        "css": "node-sass index.scss static/site.css --include-path node_modules --output-style compressed",
+        "js": "view-require -c src/require.config.js",
+        "css": "node-sass src/index.scss static/site.css --include-path node_modules --output-style compressed",
         "serve": "nodemon ../bin/d3fluid -w ../bin/d3fluid"
     },
     "dependencies": {
