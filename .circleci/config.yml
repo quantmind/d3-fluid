@@ -12,6 +12,9 @@ jobs:
       - run:
           name: test
           command: yarn test
+      - run:
+          name: upload coverage
+          command: bash <(curl -s https://codecov.io/bash)
   release:
     working_directory: ~/release
     docker:

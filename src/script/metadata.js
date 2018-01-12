@@ -4,7 +4,12 @@ import {assign} from 'd3-let';
 export default {
 
     install (vm, metadata) {
-        metadata = assign(metadata || {}, vm.select('head').attr('data-meta'));
+        var head = vm.select('head');
+        metadata = assign(metadata || {}, head.attr('data-meta'));
+        if (!metadata.title) {
+            var t = head.select('title');
+            metadata.title = t.size() === 1 ? t.text() : '';
+        }
         vm.model.metadata = metadata;
         vm.events.on('mounted.metadata', bindMeta);
     }

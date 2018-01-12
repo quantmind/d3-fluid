@@ -1,13 +1,13 @@
 import {createSitemap} from 'sitemap';
 import glob from 'glob';
-import logger from '../utils/logger';
+import {viewProviders} from 'd3-view';
 
 const CWD = process.cwd();
 
 
-export default function(app, siteConfig) {
+export default function (app, siteConfig) {
 
-    app.get('/sitemap.xml', function(req, res) {
+    app.get('/sitemap.xml', (req, res) => {
         res.set('Content-Type', 'application/xml');
 
         sitemap(siteConfig, xml => {
@@ -21,7 +21,7 @@ export default function(app, siteConfig) {
 function sitemap (siteConfig, callback) {
     if (!siteConfig.markdown) return;
     var paths = siteConfig.markdown.paths || [];
-    logger.info('sitemap triggered');
+    viewProviders.logger.info('sitemap triggered');
     let urls = [];
 
     paths.forEach(cfg => {

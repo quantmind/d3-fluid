@@ -2,12 +2,11 @@ import express from 'express';
 import {join} from 'path';
 import {existsSync, readFileSync} from 'fs';
 import {compile} from 'handlebars';
-
-// import {JSDOM} from 'jsdom';
 import {viewSlugify} from 'd3-view';
 
-import logger from '../utils/logger';
+// import {JSDOM} from 'jsdom';
 import extractMetadata from '../utils/meta';
+import debug from '../utils/debug';
 import {templates} from '../templates/index';
 
 //
@@ -86,35 +85,45 @@ function markdown (cfg, plugins, siteConfig) {
         tryFile(req.params.name, res, next);
     });
 
-    logger.info(`Markdown micro-site\n${JSON.stringify(ctx, null, 4)}`);
+    debug('Markdown micro-site');
+    debug(ctx);
 
     return app;
 
     function tryFile (name, res, next) {
         let file = join(siteConfig.PATH, cfg.path + name);
-        logger.debug(`try loading from "${file}"`);
+        debug(`try loading from "${file}"`);
 
+        let render = false;
         if (!existsSync(file)) {
             file = `${file}.md`;
+            render = true;
             if (!existsSync(file)) {
                 next();
                 return;
             }
         }
 
-        const context = Object.assign(
-            {}, ctx, extractMetadata(readFileSync(file, 'utf8'))
-        );
+        const ext = file.split('.').pop();
+        let text = readFileSync(file, 'utf8');
 
-        // generate table of contents if appropriate
-        if (context.content) {
-            context.content = compile(context.content)(context);
+        if (ext === 'md') {
+            const context = Object.assign({}, ctx, extractMetadata(text));
 
-            if (context.content.indexOf(TABLE_OF_CONTENTS_TOKEN) !== -1)
-                context.content = insertTableOfContents(context.content);
+            // generate table of contents if appropriate
+            if (context.content) {
+                context.content = compile(context.content)(context);
+
+                if (context.content.indexOf(TABLE_OF_CONTENTS_TOKEN) !== -1)
+                    context.content = insertTableOfContents(context.content);
+            }
+            if (render) text = renderDoc(context);
+            else {
+                res.setHeader('Content-Type', 'application/json');
+                text = JSON.stringify(context);
+            }
         }
-
-        return res.send(renderDoc(context));
+        return res.send(text);
     }
 }
 

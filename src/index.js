@@ -1,11 +1,10 @@
 import command from 'commander';
 import tcpPortUsed from 'tcp-port-used';
+import {viewProviders} from 'd3-view';
 
 import {version} from '../package.json';
-import server from './core/server.js';
-import readConfig from './config.js';
 
-import logger from './utils/logger';
+import createApp from './core/app';
 
 
 command
@@ -22,17 +21,19 @@ command
 const configFile = command.config;
 const port = parseInt(command.port, 10) || 9020;
 
-logger.debugEnabled = command.debug;
+viewProviders.setDebug(command.debug);
 
 
 tcpPortUsed.check(port, 'localhost').then(inUse => {
     if (inUse) {
-        logger.error(`Port ${port} is in use`);
+        viewProviders.logger.error(`Port ${port} is in use`);
         process.exit(1);
     } else {
-        const config = readConfig(configFile);
-        server(config, port);
+        const app = createApp(configFile);
+        app.listen(port, () => {
+            viewProviders.logger.log(`Starting d3fluid server on port ${port}`);
+        });
     }
 }).catch(err => {
-    logger.error(err);
+    viewProviders.logger.error(err);
 });

@@ -20,7 +20,8 @@ export default [
             babel({
                 babelrc: false,
                 runtimeHelpers: true,
-                presets: ['es2015-rollup']
+                presets: ['es2015-rollup'],
+                plugins: ["transform-object-rest-spread"]
             })
         ]
     },

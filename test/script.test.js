@@ -1,5 +1,6 @@
 import {view} from 'd3-view';
 
+import './utils';
 import {fluidMetadata} from "../index";
 
 
