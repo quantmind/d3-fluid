@@ -22,7 +22,7 @@ export default function (file) {
     if (!existsSync(filePath)) {
         viewProviders.logger.warn(`No ${file} file found in website folder!`);
     } else {
-        cfg = {cfg, ...require(filePath)};
+        cfg = {...cfg, ...require(filePath)};
     }
     cfg.env = process.env.ENV || 'dev';
     debug(cfg);

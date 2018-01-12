@@ -1,5 +1,6 @@
 import request from "supertest";
 import createApp from "../src/core/app";
+import {templates} from "../src/templates/index";
 import './utils';
 
 
@@ -22,4 +23,7 @@ describe('Test app', () => {
         expect(app).toBeTruthy();
     });
 
+    test('templates', () => {
+        expect(Object.keys(templates).length).toBe(3);
+    });
 });

@@ -1,7 +1,8 @@
+import {compile} from 'handlebars';
 //
 //  Sidebar template
 
-export default (`
+const template = compile(`
 <sidebar id="main"
     data-brand="{{ sidebarTitle }}"
     data-brand-url="/"
@@ -13,3 +14,8 @@ export default (`
     {{ footer }}
 </sidebar>
 `);
+
+
+export default function (context) {
+    return template(context);
+}

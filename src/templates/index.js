@@ -7,8 +7,8 @@ import topnav from './topnav';
 
 export const templates = {
     footer: compile(footer),
-    sidenav: compile(sidenav),
-    topnav: compile(topnav)
+    sidenav,
+    topnav
 };
 
 

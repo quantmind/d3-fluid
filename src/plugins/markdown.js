@@ -34,9 +34,12 @@ function docTemplate (ctx) {
     const scripts = ctx.scripts.map(script => {
         return `<script src="${script}"></script>`;
     }).join('\n');
+    ctx.content = ctx.content.trim();
+    //
+    // get outer template
     const template = ctx.template ? templates[ctx.template] : null;
-
     if (template) ctx.content = template(ctx);
+    else ctx.content = `<markdown>${ctx.content}</markdown>`;
 
     return (`
         <!DOCTYPE html>
@@ -81,7 +84,7 @@ function markdown (cfg, plugins, siteConfig) {
         tryFile('index', res, next);
     });
 
-    app.get('/:name', (req, res, next) => {
+    app.use('/:name', (req, res, next) => {
         tryFile(req.params.name, res, next);
     });
 
@@ -91,7 +94,8 @@ function markdown (cfg, plugins, siteConfig) {
     return app;
 
     function tryFile (name, res, next) {
-        let file = join(siteConfig.PATH, cfg.path + name);
+        let file = join(siteConfig.PATH, cfg.path + name),
+            ext = file.split('.').pop();
         debug(`try loading from "${file}"`);
 
         let render = false;
@@ -104,7 +108,7 @@ function markdown (cfg, plugins, siteConfig) {
             }
         }
 
-        const ext = file.split('.').pop();
+        ext = file.split('.').pop();
         let text = readFileSync(file, 'utf8');
 
         if (ext === 'md') {

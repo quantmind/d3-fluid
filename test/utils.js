@@ -29,6 +29,8 @@ export const logger = {
 
 viewProviders.logger = logger;
 
+viewProviders.setDebug(true);
+
 
 function popLogs (logs, num) {
     if (num !== undefined)
