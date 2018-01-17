@@ -23,7 +23,6 @@ export default {
 };
 
 
-
 function evalCode (code, scope) {
     const scopeKeys = Object.keys(scope);
     const scopeValues = scopeKeys.map(key => scope[key]);

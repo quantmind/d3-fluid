@@ -144,8 +144,8 @@ function insertTableOfContents (rawContent) {
     }
 
     const tableOfContents = headers
-      .map(header => `  - [${header}](#${viewSlugify(header)})`)
-      .join('\n');
+        .map(header => `  - [${header}](#${viewSlugify(header)})`)
+        .join('\n');
 
     return rawContent.replace(TABLE_OF_CONTENTS_TOKEN, tableOfContents);
 }

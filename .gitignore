@@ -4,6 +4,7 @@ node_modules
 bin
 build
 website/static
+nav.json
 
 #
 # files

@@ -4,7 +4,7 @@
         "js:watch": "webpack --config webpack.config.js --watch",
         "css": "node-sass src/index.scss static/site.css --include-path node_modules --output-style compressed",
         "build": "npm run-script js && npm run-script css",
-        "serve": "nodemon -w ../bin/d3fluid ../bin/d3fluid --debug"
+        "serve": "nodemon ../bin/d3fluid -w ../bin/d3fluid . -- --debug"
     },
     "dependencies": {
         "d3-fluid": "0.2",

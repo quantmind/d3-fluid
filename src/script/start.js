@@ -1,5 +1,5 @@
 import {view} from 'd3-view';
-import {viewSidebar, viewActive, viewCollapse, viewMarked} from 'd3-view-components';
+import {viewSidebar, viewActive, viewCollapse, viewMarked, viewRouter} from 'd3-view-components';
 import metadata from './metadata';
 import viewCard from './card';
 import viewLive from './live';
@@ -24,7 +24,7 @@ export default function () {
             collapse: viewCollapse
         }
     });
-    vm.use(metadata);
+    vm.use(metadata).use(viewRouter);
     //
     var el = document.getElementById('root');
     vm.mount(el);

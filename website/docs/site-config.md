@@ -1,3 +1,7 @@
+---
+title: siteConfig.js
+---
+
 # siteConfig.js
 
 A large part of site configuration is done by editing the ``siteConfig.js`` file.
