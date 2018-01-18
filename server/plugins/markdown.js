@@ -34,6 +34,7 @@ function docTemplate (ctx) {
     const scripts = pop(ctx, 'scripts').map(script => {
         return `<script src="${script}"></script>`;
     }).join('\n');
+    const bodyExtra = pop(ctx, 'bodyExtra').join('\n');
     const content = pop(ctx, 'content').trim();
     ctx = JSON.stringify(ctx);
     //
@@ -55,6 +56,7 @@ function docTemplate (ctx) {
                 <fluid-content>${content}</fluid-content>
             </div>
             ${scripts}
+            ${bodyExtra}
         </body>
         </html>
     `);

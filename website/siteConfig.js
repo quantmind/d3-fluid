@@ -5,6 +5,9 @@ module.exports = {
     algolia: {
         apiKey: process.env.ALGOLIA_API_KEY
     },
+    google: {
+        analyticsId: 'UA-110136266-3'
+    },
     github: "quantmind/d3-fluid",
     markdown: {
         "paths": [
