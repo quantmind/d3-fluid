@@ -1,7 +1,8 @@
 {
     "rootDir": "../",
     "roots": [
-        "<rootDir>/src/",
+        "<rootDir>/server/",
+        "<rootDir>/app/",
         "<rootDir>/test/"
     ],
     "collectCoverage": true,
@@ -14,17 +15,19 @@
         "text-summary"
     ],
     "collectCoverageFrom": [
-        "src/**"
+        "server/**",
+        "app/**"
     ],
     "coveragePathIgnorePatterns": [
-        "src/index.js"
+        "server/init",
+        "server/index.js"
     ],
     "coverageThreshold": {
         "global": {
-            "branches": 20,
-            "functions": 20,
-            "lines": 20,
-            "statements": 20
+            "branches": 10,
+            "functions": 10,
+            "lines": 10,
+            "statements": 10
         }
     }
 }

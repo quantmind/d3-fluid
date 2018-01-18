@@ -7,7 +7,7 @@ const externals = Object.keys(dependencies);
 
 export default [
     {
-        input: 'src/index.js',
+        input: 'server/index.js',
         external: externals.concat(['fs', 'path', 'console']),
         output: {
             banner: '#!/usr/bin/env node',
@@ -26,7 +26,7 @@ export default [
         ]
     },
     {
-        input: 'index.js',
+        input: 'app/index.js',
         external: ['d3-let', 'd3-view', 'd3-view-components', 'handlebars', 'highlightjs', 'remarkable'],
         output: {
             format: 'umd',

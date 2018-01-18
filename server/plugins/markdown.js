@@ -3,11 +3,11 @@ import {join} from 'path';
 import {existsSync, readFileSync} from 'fs';
 import {compile} from 'handlebars';
 import {viewSlugify} from 'd3-view';
+import {pop} from 'd3-let';
 
 // import {JSDOM} from 'jsdom';
 import extractMetadata from '../utils/meta';
 import debug from '../utils/debug';
-import {templates} from '../templates/index';
 
 //
 //  Serve markdown pages matching a pattern
@@ -28,32 +28,31 @@ export default function (app, siteConfig) {
 
 
 function docTemplate (ctx) {
-    const css = ctx.stylesheets.map(stylesheet => {
+    const css = pop(ctx, 'stylesheets').map(stylesheet => {
         return `<link href="${stylesheet}" media="all" rel="stylesheet" />`;
     }).join('\n');
-    const scripts = ctx.scripts.map(script => {
+    const scripts = pop(ctx, 'scripts').map(script => {
         return `<script src="${script}"></script>`;
     }).join('\n');
-    ctx.content = ctx.content.trim();
+    const content = pop(ctx, 'content').trim();
+    ctx = JSON.stringify(ctx);
     //
     // get outer template
-    const template = ctx.template ? templates[ctx.template] : null;
-    if (template) ctx.content = template(ctx);
-    else ctx.content = `<markdown>${ctx.content}</markdown>`;
 
     return (`
         <!DOCTYPE html>
         <html>
-        <head data-meta='${ctx.metadata}'>
+        <head>
             <title>${ctx.title}</title>
             <meta charset="utf-8">
             <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
             <meta name="viewport" content="width=device-width, initial-scale=1">
             ${css}
+            <script>var config='${ctx}'</script>
         </head>
         <body>
             <div id="root">
-                ${ctx.content}
+                <fluid-content>${content}</fluid-content>
             </div>
             ${scripts}
         </body>

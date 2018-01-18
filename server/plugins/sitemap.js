@@ -12,7 +12,7 @@ const CWD = process.cwd();
 
 export default function (app, siteConfig) {
 
-    buildNavigations(siteConfig);
+    // buildNavigations(siteConfig);
 
     app.get('/sitemap.xml', (req, res) => {
         res.set('Content-Type', 'application/xml');

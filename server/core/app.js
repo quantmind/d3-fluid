@@ -5,7 +5,6 @@ import algolia from '../plugins/algolia';
 import icons from '../plugins/icons';
 import markdown from '../plugins/markdown';
 import sitemap from '../plugins/sitemap';
-import templates from '../templates/index';
 
 //
 //  Create d3-fluid server application
@@ -17,7 +16,6 @@ export default function (config) {
     app.config = config;
 
     app.use('/static', express.static('static'));
-    templates(app, config);
     algolia(app, config);
     icons(app, config);
     sitemap(app, config);

@@ -1,6 +1,7 @@
 //import request from "supertest";
+import createApp from "../server/core/app";
+
 import './utils';
-import createApp from "../src/core/app";
 
 
 describe('Website', () => {
@@ -9,6 +10,7 @@ describe('Website', () => {
 
     test('meta', () => {
         expect(app).toBeTruthy();
+        expect(app.config).toBeTruthy();
     });
 
 });

@@ -1,7 +1,8 @@
 import {view} from 'd3-view';
 
+import {fluidMetadata} from "../app/index";
+
 import './utils';
-import {fluidMetadata} from "../index";
 
 
 describe('Test script', () => {

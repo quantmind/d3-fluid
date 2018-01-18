@@ -1,9 +1,9 @@
 import {view} from 'd3-view';
 import {viewSidebar, viewActive, viewCollapse, viewMarked, viewRouter} from 'd3-view-components';
-import metadata from './metadata';
-import viewCard from './card';
-import viewLive from './live';
-import topnav from './topnav';
+import metadata from './components/metadata';
+import viewCard from './components/card';
+import viewLive from './components/live';
+import topnav from './components/topnav';
 
 
 //  Create View
