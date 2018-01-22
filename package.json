@@ -28,7 +28,7 @@
     "dependencies": {
         "commander": "2.13",
         "d3-let": "0.4",
-        "d3-view": "1.2",
+        "d3-view": "1.2.3",
         "d3-view-components": "0.2",
         "express": "4.16",
         "feed": "1.1",
