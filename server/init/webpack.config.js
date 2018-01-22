@@ -11,7 +11,6 @@ module.exports = {
         filename: 'site.js'
     },
     devtool: 'source-map',
-    plugins:
     resolve: {
         alias: {
             'handlebars' : 'handlebars/dist/handlebars.js'
@@ -28,6 +27,10 @@ module.exports = {
                         presets: ['es2015']
                     }
                 }
+            },
+            {
+                test: /\.html$/,
+                use: 'raw-loader'
             }
         ]
     }

@@ -1,3 +1,3 @@
-import {fluidStart} from 'd3-fluid';
+import {start} from 'd3-fluid';
 
-fluidStart();
+start();

@@ -26,6 +26,6 @@ export default function () {
     });
     vm.use(metadata).use(viewRouter);
     //
-    var el = document.getElementById('root');
+    var el = window.document.getElementById('root');
     vm.mount(el);
 }

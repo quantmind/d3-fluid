@@ -27,6 +27,7 @@
     },
     "dependencies": {
         "commander": "2.13",
+        "d3-let": "0.4",
         "d3-view": "1.2",
         "d3-view-components": "0.2",
         "express": "4.16",
@@ -64,9 +65,9 @@
         "supertest": "3.0"
     },
     "scripts": {
-        "lint": "eslint dev test src website/src",
-        "unit": "jest -c dev/jest.config.json",
-        "test": "npm run-script lint && npm run-script unit",
+        "lint": "eslint dev test server app website/src",
+        "test:unit": "jest -c dev/jest.config.json",
+        "test": "npm run-script lint && npm run-script test:unit",
         "rollup": "rollup -c dev/rollup.config.js && chmod +x bin/d3fluid",
         "dev": "rollup -c dev/rollup.config.js -w",
         "prepublish": "npm run-script rollup",

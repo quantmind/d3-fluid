@@ -4,7 +4,7 @@ import createApp from "../server/core/app";
 import './utils';
 
 
-describe('Test app', () => {
+describe('Server', () => {
 
     test('meta', () => {
         const app = createApp();

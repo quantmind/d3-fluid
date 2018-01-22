@@ -1,5 +1,6 @@
 import json from 'rollup-plugin-json';
 import babel from 'rollup-plugin-babel';
+import sourcemaps from 'rollup-plugin-sourcemaps';
 import {dependencies} from '../package.json';
 
 const externals = Object.keys(dependencies);
@@ -27,10 +28,11 @@ export default [
     },
     {
         input: 'app/index.js',
-        external: ['d3-let', 'd3-view', 'd3-view-components', 'handlebars', 'highlightjs', 'remarkable'],
+        external: ['d3-let', 'd3-view', 'd3-view-components', 'handlebars'],
         output: {
             format: 'umd',
             extend: true,
+            sourcemap: true,
             file: 'build/d3-fluid.js',
             name: 'd3',
             globals: {
@@ -44,6 +46,7 @@ export default [
         },
         plugins: [
             json(),
+            sourcemaps(),
             babel({
                 babelrc: false,
                 runtimeHelpers: true,

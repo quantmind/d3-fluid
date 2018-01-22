@@ -1,6 +1,6 @@
 import express from 'express';
-import {join} from 'path';
 import {existsSync, readFileSync} from 'fs';
+import {join} from 'path';
 import {compile} from 'handlebars';
 import {viewSlugify} from 'd3-view';
 import {pop} from 'd3-let';
@@ -8,13 +8,14 @@ import {pop} from 'd3-let';
 // import {JSDOM} from 'jsdom';
 import extractMetadata from '../utils/meta';
 import debug from '../utils/debug';
+import {resolve} from '../utils/path';
+
 
 //
 //  Serve markdown pages matching a pattern
-
-
 export default function (app, siteConfig) {
     if (!siteConfig.markdown) return;
+
     const
         plugins = siteConfig.markdown.plugins,
         paths = siteConfig.markdown.paths || [];
@@ -27,14 +28,14 @@ export default function (app, siteConfig) {
 }
 
 
-function docTemplate (ctx) {
-    const css = pop(ctx, 'stylesheets').map(stylesheet => {
+function docTemplate (ctx, siteConfig) {
+    const css = siteConfig.stylesheets.map(stylesheet => {
         return `<link href="${stylesheet}" media="all" rel="stylesheet" />`;
     }).join('\n');
-    const scripts = pop(ctx, 'scripts').map(script => {
+    const scripts = siteConfig.scripts.map(script => {
         return `<script src="${script}"></script>`;
     }).join('\n');
-    const bodyExtra = pop(ctx, 'bodyExtra').join('\n');
+    const bodyExtra = siteConfig.bodyExtra.join('\n');
     const content = pop(ctx, 'content').trim();
     ctx = JSON.stringify(ctx);
     //
@@ -63,9 +64,9 @@ function docTemplate (ctx) {
 }
 
 
-function renderDoc (ctx) {
+function renderDoc (ctx, siteConfig) {
     ctx.metadata = JSON.stringify(ctx.metadata);
-    return docTemplate(ctx);
+    return docTemplate(ctx, siteConfig);
     //const dom = new JSDOM(
     //    docTemplate(ctx),
     //    {runScripts: "dangerously"}
@@ -74,12 +75,9 @@ function renderDoc (ctx) {
 }
 
 
-function markdown (cfg, plugins, siteConfig) {
+function markdown (ctx, plugins, siteConfig) {
 
     const app = express();
-    const ctx = Object.assign({}, siteConfig, cfg);
-    delete ctx.markdown;
-    delete ctx.plugins;
 
     app.get('/', (req, res, next) => {
         tryFile('index', res, next);
@@ -95,7 +93,8 @@ function markdown (cfg, plugins, siteConfig) {
     return app;
 
     function tryFile (name, res, next) {
-        let file = join(siteConfig.PATH, cfg.path + name),
+        let path = resolve(siteConfig.path, ctx.path),
+            file = join(path, name),
             ext = file.split('.').pop();
         debug(`try loading from "${file}"`);
 
@@ -122,7 +121,7 @@ function markdown (cfg, plugins, siteConfig) {
                 if (context.content.indexOf(TABLE_OF_CONTENTS_TOKEN) !== -1)
                     context.content = insertTableOfContents(context.content);
             }
-            if (render) text = renderDoc(context);
+            if (render) text = renderDoc(context, siteConfig);
             else {
                 res.setHeader('Content-Type', 'application/json');
                 text = JSON.stringify(context);

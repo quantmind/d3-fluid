@@ -13,13 +13,13 @@ module.exports = {
         "paths": [
             {
                 slug: "docs",
-                path: "docs/",
+                path: "./docs",
                 template: "sidenav",
 
             },
             {
                 slug: "",
-                path: "/",
+                path: ".",
                 template: "topnav",
                 topnavBrand: "d3-fluid",
                 rightNav: [

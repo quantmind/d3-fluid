@@ -1,18 +1,15 @@
 import {createSitemap} from 'sitemap';
 import {readFileSync, writeFileSync} from 'fs';
-import {join} from 'path';
 import glob from 'glob';
 import {viewProviders} from 'd3-view';
 
 import extractMetadata from '../utils/meta';
-
-
-const CWD = process.cwd();
+import {resolve, clean} from '../utils/path';
 
 
 export default function (app, siteConfig) {
 
-    // buildNavigations(siteConfig);
+    buildNavigations(siteConfig);
 
     app.get('/sitemap.xml', (req, res) => {
         res.set('Content-Type', 'application/xml');
@@ -24,12 +21,13 @@ export default function (app, siteConfig) {
 
 }
 
-
+//
+//  Build JSON files for site navigation
 function buildNavigations(siteConfig) {
     var paths = siteConfig.markdown ? siteConfig.markdown.paths || [] : [];
 
     paths.forEach(cfg => {
-        var path = join(CWD, cfg.path);
+        var path = resolve(siteConfig.path, cfg.path);
         const nav = [];
 
         let files = glob.sync(path + '*.md'),
@@ -39,8 +37,7 @@ function buildNavigations(siteConfig) {
             meta = extractMetadata(readFileSync(file, 'utf8')).metadata;
             url = file.substring(path.length, file.length-3);
             if (url === 'index') url = '';
-            url = "/" + cfg.slug + "/" + url;
-            url = url.replace(/^\/+/, '/');
+            url = clean("/" + cfg.slug + "/" + url);
 
             nav.push({
                 url: url,
@@ -59,7 +56,7 @@ function sitemap (siteConfig, callback) {
     let urls = [];
 
     paths.forEach(cfg => {
-        var path = join(CWD, cfg.path);
+        var path = resolve(siteConfig.path, cfg.path);
         logger.debug(path);
         let files = glob.sync(path + '*.md'),
             url;
