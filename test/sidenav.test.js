@@ -1,4 +1,4 @@
-import render from 'd3-view/test/render';
+import {render} from 'd3-view-test';
 
 import {sidenav} from '../app/index';
 
