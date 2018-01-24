@@ -37,7 +37,7 @@
         "highlightjs": "9.10",
         "immutable": "3.8",
         "jsdom": "11.6",
-        "marked": "0.3",
+        "marked": "~0.3.9",
         "morgan": "1.9",
         "sitemap": "1.13",
         "tcp-port-used": "0.1"
