@@ -37,8 +37,8 @@
         "highlightjs": "9.10",
         "immutable": "3.8",
         "jsdom": "11.6",
+        "marked": "0.3",
         "morgan": "1.9",
-        "remarkable": "1.7",
         "sitemap": "1.13",
         "tcp-port-used": "0.1"
     },
@@ -72,6 +72,7 @@
         "dev": "rollup -c dev/rollup.config.js -w",
         "prepublish": "npm run-script rollup",
         "postpublish": "VERSION=`node -e 'console.log(require(\"./package.json\").version)'`; git push && git tag -am \"Release $VERSION.\" v${VERSION} && git push --tags && mkdir -p ../giottojs.org/latest && mkdir -p ../giottojs.org/d3-view/${VERSION} && cp build/* ../giottojs.org/d3-view/${VERSION}/ && cp build/* ../giottojs.org/latest/ && cd ../giottojs.org && git add d3-view/${VERSION} latest && git commit -a -m \"d3-view ${VERSION}\" && git push",
-        "release": "publish"
+        "release": "publish",
+        "prepare": "npm run-script rollup"
     }
 }
