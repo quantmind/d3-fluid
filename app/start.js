@@ -1,31 +1,30 @@
 import {view} from 'd3-view';
-import {viewSidebar, viewActive, viewCollapse, viewMarked, viewRouter} from 'd3-view-components';
+import {viewMarked, viewRouter} from 'd3-view-components';
+import sidenav from './components/sidenav';
 import metadata from './components/metadata';
-import viewCard from './components/card';
+import card from './components/card';
 import viewLive from './components/live';
 import topnav from './components/topnav';
 
 
 //  Create View
 //
-export default function () {
+export default function (root) {
+    if (!root) root = window;
+    const model = root.config ? JSON.parse(root.config) : {};
 
     // Build the model-view pair
     var vm = view({
+        model,
         components: {
             markdown: viewMarked,
-            card: viewCard,
             'view-live': viewLive,
-            sidebar: viewSidebar,
+            card,
             topnav
-        },
-        directives: {
-            active: viewActive,
-            collapse: viewCollapse
         }
     });
-    vm.use(metadata).use(viewRouter);
+    vm.use(metadata).use(sidenav).use(viewRouter);
     //
-    var el = window.document.getElementById('root');
+    var el = root.document.getElementById('root');
     vm.mount(el);
 }

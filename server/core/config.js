@@ -9,7 +9,7 @@ const CWD = process.cwd();
 
 
 const defaults = {
-    ENV: process.env.NODE_ENV || 'dev',
+    env: process.env.NODE_ENV || 'dev',
     static: '/static',
     scripts: ['/static/site.js'],
     bodyExtra: [],
@@ -36,8 +36,7 @@ export default function (file) {
     const config = {
         ...defaults,
         ...cfg,
-        path,
-        env: process.env.ENV || 'dev'
+        path
     };
     debug(config);
     return config;

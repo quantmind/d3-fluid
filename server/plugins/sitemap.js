@@ -1,5 +1,6 @@
 import {createSitemap} from 'sitemap';
-import {readFileSync, writeFileSync} from 'fs';
+import {readFileSync, writeFileSync, existsSync, readdirSync, lstatSync} from 'fs';
+import {join} from 'path';
 import glob from 'glob';
 import {viewProviders} from 'd3-view';
 
@@ -27,25 +28,36 @@ function buildNavigations(siteConfig) {
     var paths = siteConfig.markdown ? siteConfig.markdown.paths || [] : [];
 
     paths.forEach(cfg => {
-        var path = resolve(siteConfig.path, cfg.path);
-        const nav = [];
+        cfg.path = resolve(siteConfig.path, cfg.path);
+        const index = cfg.index || 'readme',
+            nav = [];
 
-        let files = glob.sync(path + '*.md'),
-            meta, url;
+        readdirSync(cfg.path).forEach(name => {
+            var n = name.length-3;
+            let file = join(cfg.path, name),
+                url, meta;
 
-        files.forEach(file => {
-            meta = extractMetadata(readFileSync(file, 'utf8')).metadata;
-            url = file.substring(path.length, file.length-3);
-            if (url === 'index') url = '';
-            url = clean("/" + cfg.slug + "/" + url);
+            if (name.substring(n) === '.md') {
+                name = name.substring(0, n);
+                if (name === index) name = null;
+            } else if (lstatSync(file).isDirectory()) {
+                file = join(file, `${index}.md`);
+                if (!existsSync(file)) name = null;
+            } else
+                name = null;
 
-            nav.push({
-                url: url,
-                label: meta.title || url
-            });
+            if (name) {
+                meta = extractMetadata(readFileSync(file, 'utf8')).metadata;
+                url = clean("/" + cfg.slug + "/" + name);
+
+                nav.push({
+                    url: url,
+                    label: meta.title || name
+                });
+            }
         });
 
-        writeFileSync(`${path}nav.json`, JSON.stringify(nav, null, 4));
+        writeFileSync(`${cfg.path}nav.json`, JSON.stringify(nav, null, 4));
     });
 }
 

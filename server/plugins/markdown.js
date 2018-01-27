@@ -1,5 +1,5 @@
 import express from 'express';
-import {existsSync, readFileSync} from 'fs';
+import {existsSync, readFileSync, lstatSync} from 'fs';
 import {join} from 'path';
 import {compile} from 'handlebars';
 import {viewSlugify} from 'd3-view';
@@ -8,36 +8,38 @@ import {pop} from 'd3-let';
 // import {JSDOM} from 'jsdom';
 import extractMetadata from '../utils/meta';
 import debug from '../utils/debug';
-import {resolve} from '../utils/path';
 
 
 //
 //  Serve markdown pages matching a pattern
-export default function (app, siteConfig) {
-    if (!siteConfig.markdown) return;
+export default {
 
-    const
-        plugins = siteConfig.markdown.plugins,
-        paths = siteConfig.markdown.paths || [];
+    init (app, siteConfig) {
+        if (!siteConfig.markdown) return;
 
-    paths.forEach(cfg => {
-        const slug = cfg.slug || '';
-        app.use(`/${slug}`, markdown(cfg, plugins, siteConfig));
-    });
+        const
+            plugins = siteConfig.markdown.plugins,
+            paths = siteConfig.markdown.paths || [];
 
-}
+        paths.forEach(cfg => {
+            const slug = cfg.slug || '';
+            app.use(`/${slug}`, markdown(cfg, plugins, siteConfig));
+        });
+    },
+
+    context (ctx, siteConfig) {
+        ctx.title = siteConfig.title;
+    }
+};
 
 
 function docTemplate (ctx, siteConfig) {
-    const css = siteConfig.stylesheets.map(stylesheet => {
-        return `<link href="${stylesheet}" media="all" rel="stylesheet" />`;
-    }).join('\n');
-    const scripts = siteConfig.scripts.map(script => {
-        return `<script src="${script}"></script>`;
-    }).join('\n');
-    const bodyExtra = siteConfig.bodyExtra.join('\n');
-    const content = pop(ctx, 'content').trim();
-    ctx = JSON.stringify(ctx);
+    const css = siteConfig.stylesheets.map(stylesheet => `<link href="${stylesheet}" media="all" rel="stylesheet" />`).join('\n'),
+        scripts = siteConfig.scripts.map(script => `<script src="${script}"></script>`).join('\n'),
+        bodyExtra = siteConfig.bodyExtra.join('\n'),
+        tag = pop(ctx, 'template') || 'markdown',
+        content = pop(ctx, 'content').trim(),
+        ctxStr = JSON.stringify(ctx);
     //
     // get outer template
 
@@ -50,11 +52,11 @@ function docTemplate (ctx, siteConfig) {
             <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
             <meta name="viewport" content="width=device-width, initial-scale=1">
             ${css}
-            <script>var config='${ctx}'</script>
+            <script>var config='${ctxStr}'</script>
         </head>
         <body>
             <div id="root">
-                <fluid-content>${content}</fluid-content>
+                <${tag} class="fluid-content">${content}</${tag}>
             </div>
             ${scripts}
             ${bodyExtra}
@@ -75,12 +77,15 @@ function renderDoc (ctx, siteConfig) {
 }
 
 
+//
+//  Markdown micro site
 function markdown (ctx, plugins, siteConfig) {
 
-    const app = express();
+    const app = express(),
+        index = ctx.index || 'readme';
 
     app.get('/', (req, res, next) => {
-        tryFile('index', res, next);
+        tryFile(index, res, next);
     });
 
     app.use('/:name', (req, res, next) => {
@@ -93,9 +98,15 @@ function markdown (ctx, plugins, siteConfig) {
     return app;
 
     function tryFile (name, res, next) {
-        let path = resolve(siteConfig.path, ctx.path),
+        let path = ctx.path,
             file = join(path, name),
             ext = file.split('.').pop();
+
+        if (existsSync(file)) {
+            const stat = lstatSync(file);
+            if (stat.isDirectory()) file = join(file, index);
+        }
+
         debug(`try loading from "${file}"`);
 
         let render = false;
@@ -112,7 +123,14 @@ function markdown (ctx, plugins, siteConfig) {
         let text = readFileSync(file, 'utf8');
 
         if (ext === 'md') {
-            const context = Object.assign({}, ctx, extractMetadata(text));
+            let context = {};
+
+            siteConfig.plugins.forEach(plugin => {
+                if (plugin.context) plugin.context(context, siteConfig);
+            });
+
+            Object.assign(context, ctx, extractMetadata(text));
+            pop(context, 'path');
 
             // generate table of contents if appropriate
             if (context.content) {

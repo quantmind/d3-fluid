@@ -1,10 +1,16 @@
 $fl-inner-max-width: 1200px !default;
-
+$sidenav-content-padding: 20px 30px;
 
 .fl-inner {
     max-width: $fl-inner-max-width;
 }
 
-markdown {
+.fluid-content {
     visibility: hidden;
+}
+
+.content-main {
+    .markdown {
+        padding: $sidenav-content-padding;
+    }
 }
