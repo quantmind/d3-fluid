@@ -33,11 +33,7 @@ export default function (file) {
 
     if (!path) path = CWD;
 
-    const config = {
-        ...defaults,
-        ...cfg,
-        path
-    };
+    const config = Object.assign({}, defaults, cfg, {path});
     debug(config);
     return config;
 }

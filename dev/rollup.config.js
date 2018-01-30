@@ -1,5 +1,4 @@
 import json from 'rollup-plugin-json';
-import babel from 'rollup-plugin-babel';
 import sourcemaps from 'rollup-plugin-sourcemaps';
 import {dependencies} from '../package.json';
 
@@ -17,13 +16,7 @@ export default [
             name: 'd3fluid'
         },
         plugins: [
-            json(),
-            babel({
-                babelrc: false,
-                runtimeHelpers: true,
-                presets: ['es2015-rollup'],
-                plugins: ["transform-object-rest-spread"]
-            })
+            json()
         ]
     },
     {
@@ -46,12 +39,7 @@ export default [
         },
         plugins: [
             json(),
-            sourcemaps(),
-            babel({
-                babelrc: false,
-                runtimeHelpers: true,
-                presets: ['es2015-rollup']
-            })
+            sourcemaps()
         ]
     }
 ];

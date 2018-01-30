@@ -1,5 +1,5 @@
 {
-    "version": "0.2.1",
+    "version": "0.2.2",
     "name": "d3-fluid",
     "title": "d3-fluid - micro web framework with d3-view and express",
     "description": "Micro web framework with d3-view and express",
@@ -38,6 +38,7 @@
         "immutable": "3.8",
         "jsdom": "11.6",
         "marked": "~0.3.9",
+        "mime-types": "2.1",
         "morgan": "1.9",
         "sitemap": "1.13",
         "tcp-port-used": "0.1"
@@ -45,21 +46,13 @@
     "devDependencies": {
         "babel-core": "6.26",
         "babel-eslint": "8.2",
-        "babel-plugin-external-helpers": "6.22",
-        "babel-plugin-istanbul": "4.1",
-        "babel-plugin-transform-object-rest-spread": "6.26",
-        "babel-polyfill": "6.26",
-        "babel-preset-env": "1.6",
-        "babel-preset-es2015-rollup": "3.0",
-        "babelify": "8.0",
+        "babel-jest": "22.1",
         "d3-view-test": "0.1",
         "eslint": "4.16",
         "jest": "22.1",
         "publish": "0.6",
         "rollup": "0.55",
-        "rollup-plugin-babel": "3.0",
         "rollup-plugin-json": "2.3",
-        "rollup-plugin-node-resolve": "3.0",
         "rollup-plugin-sourcemaps": "0.4",
         "rollup-watch": "4.3",
         "supertest": "3.0"
@@ -67,7 +60,7 @@
     "scripts": {
         "lint": "eslint dev test server app website/src",
         "test:unit": "jest -c dev/jest.config.json",
-        "test": "npm run-script lint && npm run-script test:unit",
+        "test": "npm run-script lint",
         "rollup": "rollup -c dev/rollup.config.js && chmod +x bin/d3fluid",
         "dev": "rollup -c dev/rollup.config.js -w",
         "prepublish": "npm run-script rollup",

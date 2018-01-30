@@ -3,20 +3,16 @@
         "js": "webpack --config webpack.config.js",
         "js:watch": "webpack --config webpack.config.js --watch",
         "css": "node-sass src/index.scss static/site.css --include-path node_modules --output-style compressed",
-        "build": "npm run-script js && npm run-script css",
+        "prepare": "npm run-script js && npm run-script css",
         "serve": "d3fluid --debug"
     },
     "dependencies": {
+        "bootstrap": "4.0",
         "d3-fluid": "0.2",
         "d3-view": "1.2",
         "d3-view-components": "0.2"
     },
     "devDependencies": {
-        "babel-core": "6.26",
-        "babel-loader": "7.1",
-        "babel-plugin-transform-object-rest-spread": "6.26",
-        "babel-preset-env": "1.6",
-        "bootstrap": "4.0.0-beta.2",
         "node-sass": "4.7",
         "nodemon": "1.14",
         "raw-loader": "0.5",

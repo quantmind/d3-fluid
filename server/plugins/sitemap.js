@@ -51,7 +51,8 @@ function buildNavigations(siteConfig) {
                 url = clean("/" + cfg.slug + "/" + name);
 
                 nav.push({
-                    url: url,
+                    href: url,
+                    name: name,
                     label: meta.title || name
                 });
             }

@@ -22,6 +22,9 @@
         "server/init",
         "server/index.js"
     ],
+    "transform": {
+        "^.+\\.jsx?$": "babel-jest"
+    },
     "coverageThreshold": {
         "global": {
             "branches": 10,

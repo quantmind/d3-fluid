@@ -1,12 +1,20 @@
-function topnav (props) {
+import {assign} from 'd3-let';
+
+
+function template (ctx) {
     return (`
-        <nav class="navbar navbar-expand-${props.collapse}">
-        <a class="navbar-brand" href="/" d3-html="navbarBrand"></a>
-        <ul class="navbar-nav ml-auto">
-            <li d3-for="item in navbarRightNav" class="nav-item">
-                <a class="nav-link" d3-attr-href="item.href" d3-html="item.name"></a>
-            </li>
-        </nav>
+        <div class="d3-fluid">
+            <nav class="navbar navbar-expand-${ctx.collapse}">
+                <a class="navbar-brand" href="/" d3-html="navbarBrand"></a>
+                <ul class="navbar-nav ml-auto">
+                    <li d3-for="item in navbarRightNav" class="nav-item">
+                        <a class="nav-link" d3-attr-href="item.href" d3-html="item.name"></a>
+                    </li>
+                </ul>
+            </nav>
+            <markdown>${ctx.content}</markdown>
+            ${ctx.footer}
+        </div>
     `);
 }
 
@@ -21,7 +29,11 @@ export default {
         navbarRightNav: []       // right navigation
     },
 
-    render (props) {
-        return this.viewElement(topnav(props));
+    render (props, attrs, el) {
+        const
+            content = this.select(el).html(),
+            footer = '',
+            ctx = assign({content, footer}, props);
+        return template(ctx);
     }
 };

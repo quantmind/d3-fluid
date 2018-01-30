@@ -1,14 +1,20 @@
 import express from 'express';
+import mime from 'mime-types';
 import {existsSync, readFileSync, lstatSync} from 'fs';
 import {join} from 'path';
 import {compile} from 'handlebars';
 import {viewSlugify} from 'd3-view';
-import {pop} from 'd3-let';
+import {pop, assign} from 'd3-let';
 
 // import {JSDOM} from 'jsdom';
 import extractMetadata from '../utils/meta';
 import debug from '../utils/debug';
 
+
+const mdDefaults = {
+    index: 'readme',
+    highlightTheme: 'github'
+};
 
 //
 //  Serve markdown pages matching a pattern
@@ -28,20 +34,24 @@ export default {
     },
 
     context (ctx, siteConfig) {
-        ctx.title = siteConfig.title;
+        if (ctx.name == ctx.index) ctx.title = siteConfig.title;
+        else ctx.title = ctx.name;
     }
 };
 
 
 function docTemplate (ctx, siteConfig) {
-    const css = siteConfig.stylesheets.map(stylesheet => `<link href="${stylesheet}" media="all" rel="stylesheet" />`).join('\n'),
+    const css = siteConfig.stylesheets.slice(),
         scripts = siteConfig.scripts.map(script => `<script src="${script}"></script>`).join('\n'),
         bodyExtra = siteConfig.bodyExtra.join('\n'),
         tag = pop(ctx, 'template') || 'markdown',
         content = pop(ctx, 'content').trim(),
+        highlightTheme = pop(ctx, 'highlightTheme'),
         ctxStr = JSON.stringify(ctx);
     //
-    // get outer template
+    if (highlightTheme) css.push(`https://unpkg.com/highlightjs/styles/${highlightTheme}.css`);
+
+    const styles = css.map(stylesheet => `<link href="${stylesheet}" media="all" rel="stylesheet" />`);
 
     return (`
         <!DOCTYPE html>
@@ -51,7 +61,7 @@ function docTemplate (ctx, siteConfig) {
             <meta charset="utf-8">
             <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
             <meta name="viewport" content="width=device-width, initial-scale=1">
-            ${css}
+            ${styles}
             <script>var config='${ctxStr}'</script>
         </head>
         <body>
@@ -80,16 +90,17 @@ function renderDoc (ctx, siteConfig) {
 //
 //  Markdown micro site
 function markdown (ctx, plugins, siteConfig) {
-
+    ctx = assign({}, mdDefaults, ctx);
     const app = express(),
-        index = ctx.index || 'readme';
+        index = ctx.index;
 
     app.get('/', (req, res, next) => {
         tryFile(index, res, next);
     });
 
-    app.use('/:name', (req, res, next) => {
-        tryFile(req.params.name, res, next);
+    app.use('/*', (req, res, next) => {
+        debug(req.params[0]);
+        tryFile(req.params[0], res, next);
     });
 
     debug('Markdown micro-site');
@@ -99,8 +110,7 @@ function markdown (ctx, plugins, siteConfig) {
 
     function tryFile (name, res, next) {
         let path = ctx.path,
-            file = join(path, name),
-            ext = file.split('.').pop();
+            file = join(path, name);
 
         if (existsSync(file)) {
             const stat = lstatSync(file);
@@ -119,11 +129,11 @@ function markdown (ctx, plugins, siteConfig) {
             }
         }
 
-        ext = file.split('.').pop();
+        const ext = file.split('.').pop();
         let text = readFileSync(file, 'utf8');
 
         if (ext === 'md') {
-            let context = {};
+            let context = {name};
 
             siteConfig.plugins.forEach(plugin => {
                 if (plugin.context) plugin.context(context, siteConfig);
@@ -131,6 +141,7 @@ function markdown (ctx, plugins, siteConfig) {
 
             Object.assign(context, ctx, extractMetadata(text));
             pop(context, 'path');
+            pop(context, 'index');
 
             // generate table of contents if appropriate
             if (context.content) {
@@ -144,6 +155,13 @@ function markdown (ctx, plugins, siteConfig) {
                 res.setHeader('Content-Type', 'application/json');
                 text = JSON.stringify(context);
             }
+        } else {
+            const ct = mime.lookup(ext);
+            if (!ct) {
+                res.status(404);
+                text = 'Not found';
+            } else
+                res.setHeader('Content-Type', ct);
         }
         return res.send(text);
     }

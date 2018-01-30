@@ -1,5 +1,6 @@
 import {view} from 'd3-view';
-import {viewMarked, viewRouter} from 'd3-view-components';
+
+import viewComponents from './components/view';
 import sidenav from './components/sidenav';
 import metadata from './components/metadata';
 import card from './components/card';
@@ -17,13 +18,14 @@ export default function (root) {
     var vm = view({
         model,
         components: {
-            markdown: viewMarked,
             'view-live': viewLive,
             card,
             topnav
         }
     });
-    vm.use(metadata).use(sidenav).use(viewRouter);
+    vm.use(viewComponents)
+        .use(metadata)
+        .use(sidenav);
     //
     var el = root.document.getElementById('root');
     vm.mount(el);
