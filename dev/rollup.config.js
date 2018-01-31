@@ -4,7 +4,7 @@ import {dependencies, peerDependencies} from '../package.json';
 
 const externals = Object.keys(dependencies)
     .concat(Object.keys(peerDependencies))
-    .concat(['fs', 'path', 'console'])
+    .concat(['fs', 'path', 'console']);
 
 
 export default [
