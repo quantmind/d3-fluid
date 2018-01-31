@@ -4,7 +4,7 @@ import {existsSync, readFileSync, lstatSync} from 'fs';
 import {join} from 'path';
 import {compile} from 'handlebars';
 import {viewSlugify} from 'd3-view';
-import {pop, assign} from 'd3-let';
+import {pop} from 'd3-let';
 
 // import {JSDOM} from 'jsdom';
 import extractMetadata from '../utils/meta';
@@ -90,7 +90,7 @@ function renderDoc (ctx, siteConfig) {
 //
 //  Markdown micro site
 function markdown (ctx, plugins, siteConfig) {
-    ctx = assign({}, mdDefaults, ctx);
+    ctx = Object.assign({}, mdDefaults, ctx);
     const app = express(),
         index = ctx.index;
 

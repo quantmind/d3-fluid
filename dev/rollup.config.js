@@ -1,14 +1,16 @@
 import json from 'rollup-plugin-json';
 import sourcemaps from 'rollup-plugin-sourcemaps';
-import {dependencies} from '../package.json';
+import {dependencies, peerDependencies} from '../package.json';
 
-const externals = Object.keys(dependencies);
+const externals = Object.keys(dependencies)
+    .concat(Object.keys(peerDependencies))
+    .concat(['fs', 'path', 'console'])
 
 
 export default [
     {
         input: 'server/index.js',
-        external: externals.concat(['fs', 'path', 'console']),
+        external: externals,
         output: {
             banner: '#!/usr/bin/env node',
             file: 'bin/d3fluid',
