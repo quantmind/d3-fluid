@@ -1,6 +1,9 @@
 $fl-inner-max-width: 1200px !default;
 $sidenav-content-padding: 20px 30px;
 
+@import 'd3-view-components/index';
+
+
 .fl-inner {
     max-width: $fl-inner-max-width;
 }
@@ -9,8 +12,16 @@ $sidenav-content-padding: 20px 30px;
     visibility: hidden;
 }
 
-.content-main {
+#root {
+    opacity: 0;
+}
+
+
+.docs {
     .markdown {
-        padding: $sidenav-content-padding;
+        h2 {
+            border-bottom: 1px solid #eaecef;
+            padding-bottom: 0.3em;
+        }
     }
 }

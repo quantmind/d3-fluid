@@ -23,7 +23,7 @@ export default [
     },
     {
         input: 'app/index.js',
-        external: ['d3-let', 'd3-view', 'd3-view-components', 'handlebars'],
+        external: ['d3-let', 'd3-transition', 'd3-view', 'd3-view-components', 'handlebars'],
         output: {
             format: 'umd',
             extend: true,

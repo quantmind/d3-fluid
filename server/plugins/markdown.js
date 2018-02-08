@@ -51,27 +51,27 @@ function docTemplate (ctx, siteConfig) {
     //
     if (highlightTheme) css.push(`https://unpkg.com/highlightjs/styles/${highlightTheme}.css`);
 
-    const styles = css.map(stylesheet => `<link href="${stylesheet}" media="all" rel="stylesheet" />`);
+    const styles = css.map(stylesheet => `<link href="${stylesheet}" media="all" rel="stylesheet" />`).join('\n');
 
     return (`
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <title>${ctx.title}</title>
-            <meta charset="utf-8">
-            <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-            <meta name="viewport" content="width=device-width, initial-scale=1">
-            ${styles}
-            <script>var config='${ctxStr}'</script>
-        </head>
-        <body>
-            <div id="root">
-                <${tag} class="fluid-content">${content}</${tag}>
-            </div>
-            ${scripts}
-            ${bodyExtra}
-        </body>
-        </html>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>${ctx.title}</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    ${styles}
+    <script>var config='${ctxStr}'</script>
+</head>
+<body>
+    <div id="root" class="${ctx.slug}">
+        <${tag} class="fluid-content">${content}</${tag}>
+    </div>
+    ${scripts}
+    ${bodyExtra}
+</body>
+</html>
     `);
 }
 

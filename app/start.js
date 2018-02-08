@@ -26,7 +26,12 @@ export default function (root) {
     vm.use(viewComponents)
         .use(metadata)
         .use(sidenav);
+
+    root.fluid = vm;
+    if (vm.model.env === 'dev') vm.use(dev);
     //
     var el = root.document.getElementById('root');
-    vm.mount(el);
+    vm.mount(el).then(() => {
+        vm.sel.transition(150).style('opacity', 1);
+    });
 }

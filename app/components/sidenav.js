@@ -10,7 +10,6 @@ function template (ctx) {
             data-navbar-title="title"
             data-navbar-title-Url="currentUrl">
             <markdown>${ctx.content}</markdown>
-            </routes>
             ${ctx.footer}
         </sidebar>
     `);
