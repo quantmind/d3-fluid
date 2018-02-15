@@ -8,6 +8,8 @@ import icons from '../plugins/icons';
 import markdown from '../plugins/markdown';
 import sitemap from '../plugins/sitemap';
 
+const ENV = process.env.NODE_ENV || 'dev';
+
 export const plugins = [
     algolia, github, google, icons, sitemap, markdown
 ];
@@ -19,6 +21,7 @@ export default function (siteConfig) {
 
     const app = express();
     app.config = siteConfig;
+    app.config.env = ENV;
 
     app.use(siteConfig.static, express.static('static'));
     siteConfig.plugins = [];

@@ -26,7 +26,7 @@
         "d3fluid": "bin/d3fluid"
     },
     "dependencies": {
-        "commander": "2.13",
+        "commander": "2.14",
         "d3-view": "1.3",
         "d3-view-components": "0.2",
         "express": "4.16",
@@ -36,6 +36,7 @@
         "highlightjs": "9.10",
         "immutable": "3.8",
         "jsdom": "11.6",
+        "livereload": "0.6",
         "marked": "~0.3.9",
         "mime-types": "2.1",
         "morgan": "1.9",
@@ -49,10 +50,10 @@
     "devDependencies": {
         "babel-core": "6.26",
         "babel-eslint": "8.2",
-        "babel-jest": "22.1",
-        "d3-view-test": "0.1",
+        "babel-jest": "22.2",
+        "d3-view-test": "0.3",
         "eslint": "4.17",
-        "jest": "22.1",
+        "jest": "22",
         "publish": "0.6",
         "rollup": "0.55",
         "rollup-plugin-json": "2.3",
