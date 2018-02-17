@@ -8,6 +8,12 @@ import extractMetadata from '../utils/meta';
 import {resolve, clean} from '../utils/path';
 
 
+const mdDefaults = {
+    index: 'readme',
+    highlightTheme: 'github'
+};
+
+
 export default function (app, siteConfig) {
 
     buildNavigations(siteConfig);
@@ -28,13 +34,14 @@ function buildNavigations(siteConfig) {
     var paths = siteConfig.markdown ? siteConfig.markdown.paths || [] : [];
 
     paths.forEach(cfg => {
-        cfg.path = resolve(siteConfig.path, cfg.path);
-        const index = cfg.index || 'readme',
+        cfg.meta = Object.assign({}, mdDefaults, cfg.meta);
+        cfg.meta.path = resolve(siteConfig.path, cfg.meta.path);
+        const index = cfg.meta.index || 'readme',
             nav = [];
 
-        readdirSync(cfg.path).forEach(name => {
+        readdirSync(cfg.meta.path).forEach(name => {
             var n = name.length-3;
-            let file = join(cfg.path, name),
+            let file = join(cfg.meta.path, name),
                 url, meta;
 
             if (name.substring(n) === '.md') {
@@ -48,7 +55,7 @@ function buildNavigations(siteConfig) {
 
             if (name) {
                 meta = extractMetadata(readFileSync(file, 'utf8')).metadata;
-                url = clean("/" + cfg.slug + "/" + name);
+                url = clean("/" + cfg.meta.slug + "/" + name);
 
                 nav.push({
                     href: url,
@@ -58,7 +65,7 @@ function buildNavigations(siteConfig) {
             }
         });
 
-        writeFileSync(`${cfg.path}nav.json`, JSON.stringify(nav, null, 4));
+        writeFileSync(`${cfg.meta.path}nav.json`, JSON.stringify(nav, null, 4));
     });
 }
 
@@ -69,7 +76,7 @@ function sitemap (siteConfig, callback) {
     let urls = [];
 
     paths.forEach(cfg => {
-        var path = resolve(siteConfig.path, cfg.path);
+        var path = resolve(siteConfig.path, cfg.meta.path);
         logger.debug(path);
         let files = glob.sync(path + '*.md'),
             url;
@@ -77,7 +84,7 @@ function sitemap (siteConfig, callback) {
         files.forEach(file => {
             file = file.substring(path.length, file.length-3);
             if (file === 'index') file = '';
-            url = "/" + cfg.slug + "/" + file;
+            url = "/" + cfg.meta.slug + "/" + file;
             url = siteConfig.baseUrl + url.replace(/^\/+/, '/');
             logger.debug(url);
             urls.push({

@@ -5,7 +5,8 @@ function template (ctx) {
         <sidebar id="main"
             data-brand="title"
             data-brand-url="/"
-            data-primary-items='navigation'
+            data-sidebar-toggle='sidebarToggle'
+            data-primary-items='primaryItems'
             data-navbar-items='[]'
             data-navbar-title="title"
             data-navbar-title-Url="currentUrl">
@@ -16,7 +17,7 @@ function template (ctx) {
 }
 
 
-const sidenav = {
+export default {
     components: {
         sidebar: viewSidebar
     },
@@ -29,18 +30,14 @@ const sidenav = {
     render (props, attrs, el) {
         const
             content = this.select(el).html(),
+            sidenav = this.model[this.name] || this.model.$new(),
             footer = '';
-        if (!this.model.navigation)
+        if (!sidenav.primaryItems)
             return this.json('nav.json').then(response => {
-                this.model.$set('navigation', response.data);
+                sidenav.$set('primaryItems', response.data);
                 return template({content, footer});
             });
         else
             return template({content, footer});
     }
 };
-
-
-export default function (vm) {
-    vm.addComponent('sidenav', sidenav);
-}

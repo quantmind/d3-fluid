@@ -10,12 +10,6 @@ import {pop} from 'd3-let';
 import extractMetadata from '../utils/meta';
 import debug from '../utils/debug';
 
-
-const mdDefaults = {
-    index: 'readme',
-    highlightTheme: 'github'
-};
-
 //
 //  Serve markdown pages matching a pattern
 export default {
@@ -28,14 +22,15 @@ export default {
             paths = siteConfig.markdown.paths || [];
 
         paths.forEach(cfg => {
-            const slug = cfg.slug || '';
+            const slug = cfg.meta.slug || '';
             app.use(`/${slug}`, markdown(cfg, plugins, siteConfig));
         });
     },
 
-    context (ctx, siteConfig) {
-        if (ctx.name == ctx.index) ctx.title = siteConfig.title;
+    context (ctx, cfg, siteConfig) {
+        if (ctx.name == cfg.meta.index) ctx.title = cfg.title || siteConfig.title;
         else ctx.title = ctx.name;
+        if (ctx.meta) ctx.meta.env = siteConfig.env;
     }
 };
 
@@ -44,7 +39,7 @@ function docTemplate (ctx, siteConfig) {
     const css = siteConfig.stylesheets.slice(),
         scripts = siteConfig.scripts.map(script => `<script src="${script}"></script>`).join('\n'),
         bodyExtra = siteConfig.bodyExtra.join('\n'),
-        tag = pop(ctx, 'template') || 'markdown',
+        tag = pop(ctx.meta, 'template') || 'markdown',
         content = pop(ctx, 'content').trim(),
         highlightTheme = pop(ctx, 'highlightTheme'),
         ctxStr = JSON.stringify(ctx);
@@ -57,7 +52,7 @@ function docTemplate (ctx, siteConfig) {
 <!DOCTYPE html>
 <html>
 <head>
-    <title>${ctx.title}</title>
+    <title>${ctx.meta.title}</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -65,8 +60,8 @@ function docTemplate (ctx, siteConfig) {
     <script>var config='${ctxStr}'</script>
 </head>
 <body>
-    <div id="root" class="${ctx.slug}">
-        <${tag} class="fluid-content">${content}</${tag}>
+    <div id="root" class="${ctx.meta.slug}">
+        <${tag} data-model="${tag}">${content}</${tag}>
     </div>
     ${scripts}
     ${bodyExtra}
@@ -89,10 +84,9 @@ function renderDoc (ctx, siteConfig) {
 
 //
 //  Markdown micro site
-function markdown (ctx, plugins, siteConfig) {
-    ctx = Object.assign({}, mdDefaults, ctx);
+function markdown (cfg, plugins, siteConfig) {
     const app = express(),
-        index = ctx.index;
+        index = cfg.meta.index;
 
     app.get('/', (req, res, next) => {
         tryFile(index, res, next);
@@ -104,12 +98,12 @@ function markdown (ctx, plugins, siteConfig) {
     });
 
     debug('Markdown micro-site');
-    debug(ctx);
+    debug(cfg);
 
     return app;
 
     function tryFile (name, res, next) {
-        let path = ctx.path,
+        let path = cfg.meta.path,
             file = join(path, name);
 
         if (existsSync(file)) {
@@ -133,15 +127,16 @@ function markdown (ctx, plugins, siteConfig) {
         let text = readFileSync(file, 'utf8');
 
         if (ext === 'md') {
-            let context = {name};
+            let context = Object.assign({name}, extractMetadata(text));
+            if (render) {
+                context = JSON.parse(JSON.stringify(Object.assign({}, cfg, context)));
+                pop(context.meta, 'path');
+                pop(context.meta, 'index');
+            }
 
             siteConfig.plugins.forEach(plugin => {
-                if (plugin.context) plugin.context(context, siteConfig);
+                if (plugin.context) plugin.context(context, cfg, siteConfig);
             });
-
-            Object.assign(context, ctx, extractMetadata(text));
-            pop(context, 'path');
-            pop(context, 'index');
 
             // generate table of contents if appropriate
             if (context.content) {
