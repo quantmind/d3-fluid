@@ -52,4 +52,3 @@ It is easy to include a date picker in a form. For example, using the
 
 [d3-view]: https://github.com/quantmind/d3-view
 [flatpickr]: https://chmln.github.io/flatpickr/
-

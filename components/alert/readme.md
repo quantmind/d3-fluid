@@ -1,7 +1,7 @@
 ## Alert Component
 
-The alert component displays alert elements when alert messages are triggered.
-
+The alert component displays alert elements when alert events are triggered.
+Alerts are available for any length of text, as well as an optional dismiss button.
 Type a message on the right and see the alert appearing on the left.
 Same messages with same level are not repeated, instead a counter is added.
 
@@ -11,7 +11,7 @@ Same messages with same level are not repeated, instead a counter is added.
             <alerts data-transition-duration=250></alerts>
         </div>
         <div class="col-sm-6">
-            <d3form data-schema='alert/form-example.json'></d3form>
+            <d3form data-url='alert/form-example.json'></d3form>
         </div>
     </div>
 </div>
@@ -25,7 +25,7 @@ This example is created with the below markup and the [form-example.json](alert/
             <alerts data-transition-duration=250></alerts>
         </div>
         <div class="col-sm-6">
-            <d3form data-schema='alert/form-example.json'></d3form>
+            <d3form data-url='alert/form-example.json'></d3form>
         </div>
     </div>
 </div>
@@ -48,9 +48,9 @@ await vm.mount('body');
 ```
 
 ```html
-<isolated><alerts data-messages='["simple message"]'></alerts></isolated>
+<alerts data-messages='["simple message"]'></alerts>
 ```
-<isolated><alerts data-messages='["simple message"]'></alerts></isolated>
+<alerts data-messages='["simple message"]'></alerts>
 
 The ``alerts`` component finds the first ``isolatedRoot`` of the model and
 add the ``$alertMessage`` hook which listen for ``alertMessage`` custom events
@@ -78,4 +78,3 @@ model.$emit('alertMessage', {
 });
 
 ```
-

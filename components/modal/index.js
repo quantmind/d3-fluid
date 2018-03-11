@@ -2,22 +2,23 @@ import {easeExpOut} from 'd3-ease';
 import {isString} from 'd3-let';
 
 import tpl from './template.html';
+import modalHeader from './header';
+import modalBody from './body';
+import modalFooter from './footer';
 
 
 const modalComponent = {
+    components: {
+        modalHeader,
+        modalBody,
+        modalFooter
+    },
+
     props: {
         transitionDuration: 300
     },
 
     model: {
-        modalTitle: "d3-view modal",
-        modalBody: '',
-        modalDisabled: false,
-        modalActions: [
-            {
-                label: "Close"
-            }
-        ],
         showModal: false,
         $showModal () {
             this.showModal = true;
@@ -38,10 +39,21 @@ const modalComponent = {
         }
     },
 
-    render: function (props) {
-        return this.viewElement(tpl, props);
+    render (el) {
+        var props = this.props;
+        return (`
+            <div class="d3-view-modal">
+                <div class="modal" tabindex="-1" role="dialog" d3-modal="showModal" data-transition-duration="${props.transitionDuration}">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                        ${el.innerHTML}
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-backdrop fade" d3-modal="showModal" data-transition-duration="${props.transitionDuration}"></div>
+            </div>
+        `);
     }
-
 };
 
 
