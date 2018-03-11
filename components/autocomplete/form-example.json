@@ -1,0 +1,19 @@
+{
+    "children": [
+        {
+            "name": "name",
+            "label": "Full name"
+        },
+        {
+            "name": "country",
+            "label": "Country",
+            "attributes": {
+                "d3-autocomplete": {
+                    "url": "https://unpkg.com/country-list/data.json",
+                    "label": "name",
+                    "value": "code"
+                }
+            }
+        }
+    ]
+}

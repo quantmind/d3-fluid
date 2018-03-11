@@ -3,11 +3,9 @@ import {viewSidebar, viewActive, viewCollapse} from 'd3-view-components';
 function template (ctx) {
     return (`
         <sidebar id="main"
+            data-model="sidenav"
             data-brand="title"
             data-brand-url="/"
-            data-sidebar-toggle='sidebarToggle'
-            data-primary-items='primaryItems'
-            data-navbar-items='[]'
             data-navbar-title="title"
             data-navbar-title-Url="currentUrl">
             <markdown>${ctx.content}</markdown>
@@ -28,10 +26,14 @@ export default {
     },
 
     render (props, attrs, el) {
-        const
+        let
             content = this.select(el).html(),
-            sidenav = this.model[this.name] || this.model.$new(),
+            sidenav = this.model[this.name],
             footer = '';
+        if (!sidenav) {
+            sidenav =  this.model.$new();
+            this.model[this.name] = sidenav;
+        }
         if (!sidenav.primaryItems)
             return this.json('nav.json').then(response => {
                 sidenav.$set('primaryItems', response.data);

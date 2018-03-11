@@ -1,0 +1,14 @@
+<li class="list-group-entry">
+  <a class="list-group-item list-group-item-action" d3-attr-href="item.href" d3-link>
+    <icon d3-prop-name="item.icon"></icon>
+    <span d3-html="item.label || item.name"></span>
+  </a>
+  <ul class="list-group" d3-if="item.items">
+    <li class="list-group-entry" d3-for="entry in item.items">
+      <a class="list-group-item list-group-item-action" d3-attr-href="entry.href" d3-link d3-active>
+        <icon d3-prop-name="entry.icon"></icon>
+        <span d3-html="entry.label || entry.name"></span>
+      </a>
+    </li>
+  </ul>
+</li>

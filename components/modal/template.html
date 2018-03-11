@@ -1,0 +1,27 @@
+<div id="d3-view-modal">
+<div class="modal" tabindex="-1" role="dialog" d3-modal="showModal" data-transition-duration="500">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" d3-html="modalTitle"></h5>
+        <button type="button" class="close"
+            d3-on="$hideModal()"
+            d3-attr-disabled="modalDisabled">
+            &times;
+        </button>
+      </div>
+      <div class="modal-body" d3-html="modalBody"></div>
+      <div class="modal-footer" d3-if="modalActions">
+        <button
+            type="button" class="btn"
+            d3-for="action in modalActions"
+            d3-class="$actionClass(action)"
+            d3-on="$action(action)"
+            d3-html="$actionLabel(action)"
+            d3-attr-disabled="modalDisabled"></button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-backdrop fade" d3-modal="showModal" data-transition-duration="500"></div>
+</div>

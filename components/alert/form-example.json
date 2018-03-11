@@ -1,0 +1,24 @@
+{
+    "children": [
+        {
+            "name": "message",
+            "required": true
+        },
+        {
+            "name": "level",
+            "type": "select",
+            "options": [
+                "info",
+                "success",
+                "warning",
+                "danger"
+            ]
+        },
+        {
+            "type": "submit",
+            "attributes": {
+                "d3-on": "$event.preventDefault() && $alertMessage($inputData())"
+            }
+        }
+    ]
+}

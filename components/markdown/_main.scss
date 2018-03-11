@@ -1,0 +1,27 @@
+@import 'variables';
+
+markdown {
+    visibility: hidden;
+}
+
+.anchor {
+    text-decoration: none;
+    float: left;
+    padding-right: 4px;
+    margin-left: -20px;
+    line-height: 1;
+
+    .view-icon {
+        vertical-align: middle;
+        visibility: hidden;
+    }
+}
+
+
+h1,h2,h3,h4,h5,h6 {
+    &:hover {
+        .anchor svg {
+            visibility: visible;
+        }
+    }
+}

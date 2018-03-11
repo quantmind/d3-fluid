@@ -1,5 +1,5 @@
 {
-    "version": "0.2.5",
+    "version": "0.3.0",
     "name": "d3-fluid",
     "title": "d3-fluid - micro web framework with d3-view and express",
     "description": "Micro web framework with d3-view and express",
@@ -26,9 +26,9 @@
         "d3fluid": "bin/d3fluid"
     },
     "dependencies": {
-        "commander": "2.14",
+        "commander": "2.15",
         "d3-view": "1.3",
-        "d3-view-components": "0.2",
+        "d3-let": "0.4",
         "express": "4.16",
         "feed": "1.1",
         "glob": "7.1",
@@ -36,16 +36,12 @@
         "highlightjs": "9.10",
         "immutable": "3.8",
         "jsdom": "11.6",
-        "livereload": "0.6",
+        "livereload": "0.7",
         "marked": "~0.3.9",
         "mime-types": "2.1",
         "morgan": "1.9",
         "sitemap": "1.13",
         "tcp-port-used": "0.1"
-    },
-    "peerDependencies": {
-        "d3-let": "0.4",
-        "d3-view": "1.3"
     },
     "devDependencies": {
         "babel-core": "6.26",
@@ -53,23 +49,30 @@
         "babel-jest": "22",
         "d3-view-test": "0.3",
         "eslint": "4.18",
+        "feather-icons": "4.7",
+        "flatpickr": "4.3",
+        "fs-extra": "5.0",
         "jest": "22",
+        "navigo": "7.1",
         "publish": "0.6",
         "rollup": "0.56",
+        "rollup-plugin-commonjs": "9.0",
         "rollup-plugin-json": "2.3",
+        "rollup-plugin-postcss": "1.3",
+        "rollup-plugin-sass": "0.6",
         "rollup-plugin-sourcemaps": "0.4",
+        "rollup-plugin-string": "2.0",
+        "rollup-plugin-uglify": "3.0",
         "rollup-watch": "4.3",
         "supertest": "3.0"
     },
     "scripts": {
-        "lint": "eslint dev test server app website/src",
+        "lint": "eslint dev test server app components",
         "test:unit": "jest -c dev/jest.config.json",
         "test": "npm run-script lint",
-        "rollup": "rollup -c dev/rollup.config.js && chmod +x bin/d3fluid",
-        "dev": "rollup -c dev/rollup.config.js -w",
-        "prepublish": "npm run-script rollup",
+        "watch": "rollup -c dev/rollup.config.js -w",
         "postpublish": "VERSION=`node -e 'console.log(require(\"./package.json\").version)'`; git push && git tag -am \"Release $VERSION.\" v${VERSION} && git push --tags && mkdir -p ../giottojs.org/latest && mkdir -p ../giottojs.org/d3-view/${VERSION} && cp build/* ../giottojs.org/d3-view/${VERSION}/ && cp build/* ../giottojs.org/latest/ && cd ../giottojs.org && git add d3-view/${VERSION} latest && git commit -a -m \"d3-view ${VERSION}\" && git push",
         "release": "publish",
-        "prepare": "npm run-script rollup"
+        "prepare": "cp ./node_modules/navigo/lib/navigo.es.js components/router/navigo.js && cp ./node_modules/feather-icons/dist/icons.json components/icons/icons.json && rollup -c dev/rollup.config.js"
     }
 }

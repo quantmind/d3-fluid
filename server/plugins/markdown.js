@@ -57,11 +57,11 @@ function docTemplate (ctx, siteConfig) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     ${styles}
-    <script>var config='${ctxStr}'</script>
+    <script>var config=${ctxStr}</script>
 </head>
 <body>
     <div id="root" class="${ctx.meta.slug}">
-        <${tag} data-model="${tag}">${content}</${tag}>
+        <${tag} data-props="${tag}">${content}</${tag}>
     </div>
     ${scripts}
     ${bodyExtra}

@@ -1,34 +1,41 @@
 import {assign} from 'd3-let';
 
 
-function template (ctx) {
+const template = ctx => {
     return (`
         <div class="d3-fluid">
-            <nav class="navbar navbar-expand-${ctx.collapse}">
-                <a class="navbar-brand" href="/" d3-html="navbarBrand"></a>
+            <nav class="navbar navbar-expand-${ctx.collapse} ${ctx.theme}">
+                <a class="navbar-brand" href="/" html="${ctx.brand}"></a>
                 <ul class="navbar-nav ml-auto">
-                    <li d3-for="item in navigationRight" class="nav-item">
-                        <a class="nav-link" d3-attr-href="item.href" d3-html="item.name"></a>
-                    </li>
+                    ${ctx.navigationRight.map(item => {
+                        return (`
+                            <li class="nav-item">
+                                <a class="nav-link" href="${item.href}">${item.name}</a>
+                            </li>
+                        `);
+                    }).join('\n')}
                 </ul>
             </nav>
             <markdown>${ctx.content}</markdown>
             ${ctx.footer}
         </div>
     `);
-}
+};
 
 
 export default {
     props: {
-        collapse: 'sm'
+        theme: 'navbar-dark bg-dark',
+        collapse: 'sm',
+        brand: '',
+        navigationRight: []
     },
 
     render (props, attrs, el) {
         const
             content = this.select(el).html(),
             footer = '',
-            ctx = assign({content, footer}, props);
+            ctx = assign({content, footer}, this.props);
         return template(ctx);
     }
 };

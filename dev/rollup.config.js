@@ -1,10 +1,40 @@
 import json from 'rollup-plugin-json';
 import sourcemaps from 'rollup-plugin-sourcemaps';
-import {dependencies, peerDependencies} from '../package.json';
+import commonjs from 'rollup-plugin-commonjs';
+const string = require('rollup-plugin-string');
+import uglify from 'rollup-plugin-uglify';
 
-const externals = Object.keys(dependencies)
-    .concat(Object.keys(peerDependencies))
-    .concat(['fs', 'path', 'console']);
+import {dependencies} from '../package.json';
+
+const externals = Object.keys(dependencies).concat(['fs', 'path', 'console']);
+const externalsApp = ['d3-dispatch', 'd3-ease', 'd3-let', 'd3-transition', 'd3-view', 'handlebars'];
+const globalsApp = externalsApp.reduce((g, name) => {g[name] = name.substring(0, 3) === 'd3-' ? 'd3' : name; return g;}, {});
+
+
+const bundle = (entry, file, min) => {
+    const b = {
+        input: entry,
+        external: externalsApp,
+        output: {
+            format: 'umd',
+            extend: true,
+            sourcemap: true,
+            file: `build/${file}`,
+            name: 'd3',
+            globals: globalsApp
+        },
+        plugins: [
+            json(),
+            sourcemaps(),
+            commonjs(),
+            string({
+                include: '**/*.html'
+            }),
+        ]
+    };
+    if (min) b.plugins.push(uglify());
+    return b;
+};
 
 
 export default [
@@ -21,27 +51,8 @@ export default [
             json()
         ]
     },
-    {
-        input: 'app/index.js',
-        external: ['d3-let', 'd3-transition', 'd3-view', 'd3-view-components', 'handlebars'],
-        output: {
-            format: 'umd',
-            extend: true,
-            sourcemap: true,
-            file: 'build/d3-fluid.js',
-            name: 'd3',
-            globals: {
-                'd3-let': 'd3',
-                'd3-view': 'd3',
-                'd3-view-components': 'd3',
-                'handlebars': 'handlebars',
-                'highlightjs': 'highlightjs',
-                'remarkable': 'remarkable'
-            }
-        },
-        plugins: [
-            json(),
-            sourcemaps()
-        ]
-    }
+    bundle('components/index.js', 'd3-fluid.js'),
+    bundle('components/index.js', 'd3-fluid.min.js', true),
+    bundle('app/index.js', 'd3-fluid-app.js'),
+    bundle('app/index.js', 'd3-fluid-app.min.js', true)
 ];

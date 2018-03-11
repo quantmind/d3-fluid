@@ -20,7 +20,7 @@ const components = {
 //
 export default function (root) {
     if (!root) root = window;
-    const model = root.config ? JSON.parse(root.config) : {},
+    const model = root.config || {},
         props = pop(model, 'meta') || {};
 
     // Build the model-view pair
