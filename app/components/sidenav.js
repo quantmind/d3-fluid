@@ -1,4 +1,4 @@
-import {viewSidebar, viewActive, viewCollapse} from 'd3-view-components';
+import {viewSidebar, viewActive, viewCollapse} from '../../components/index';
 
 function template (ctx) {
     return (`
@@ -25,7 +25,7 @@ export default {
         active: viewActive
     },
 
-    render (props, attrs, el) {
+    render (el) {
         let
             content = this.select(el).html(),
             sidenav = this.model[this.name],
