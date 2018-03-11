@@ -1,27 +1,31 @@
 import json from 'rollup-plugin-json';
 import sourcemaps from 'rollup-plugin-sourcemaps';
 import commonjs from 'rollup-plugin-commonjs';
-const string = require('rollup-plugin-string');
+import resolve from 'rollup-plugin-node-resolve';
+import sass from 'rollup-plugin-sass';
+import string from 'rollup-plugin-string';
 import uglify from 'rollup-plugin-uglify';
 
 import {dependencies} from '../package.json';
 
 const externals = Object.keys(dependencies).concat(['fs', 'path', 'console']);
-const externalsApp = ['d3-dispatch', 'd3-ease', 'd3-let', 'd3-transition', 'd3-view', 'handlebars'];
-const globalsApp = externalsApp.reduce((g, name) => {g[name] = name.substring(0, 3) === 'd3-' ? 'd3' : name; return g;}, {});
+const externalsApp = ['d3-dispatch', 'd3-ease', 'd3-selection', 'd3-timer', 'd3-transition', 'handlebars'];
+const externalsComponent = externalsApp.concat(['d3-let', 'd3-view']);
 
 
-const bundle = (entry, file, min) => {
+const bundle = (entry, file, externals, min) => {
+    const globals = externals.reduce((g, name) => {g[name] = name.substring(0, 3) === 'd3-' ? 'd3' : name; return g;}, {});
+
     const b = {
         input: entry,
-        external: externalsApp,
+        external: externals,
         output: {
             format: 'umd',
             extend: true,
             sourcemap: true,
             file: `build/${file}`,
             name: 'd3',
-            globals: globalsApp
+            globals: globals
         },
         plugins: [
             json(),
@@ -30,6 +34,8 @@ const bundle = (entry, file, min) => {
             string({
                 include: '**/*.html'
             }),
+            sass(),
+            resolve()
         ]
     };
     if (min) b.plugins.push(uglify());
@@ -44,6 +50,7 @@ export default [
         output: {
             banner: '#!/usr/bin/env node',
             file: 'bin/d3fluid',
+            sourcemap: true,
             format: 'cjs',
             name: 'd3fluid'
         },
@@ -51,8 +58,8 @@ export default [
             json()
         ]
     },
-    bundle('components/index.js', 'd3-fluid.js'),
-    bundle('components/index.js', 'd3-fluid.min.js', true),
-    bundle('app/index.js', 'd3-fluid-app.js'),
-    bundle('app/index.js', 'd3-fluid-app.min.js', true)
+    bundle('components/index.js', 'd3-fluid.js', externalsComponent),
+    bundle('components/index.js', 'd3-fluid.min.js', externalsComponent, true),
+    bundle('app/index.js', 'd3-fluid-app.js', externalsApp),
+    bundle('app/index.js', 'd3-fluid-app.min.js', externalsApp, true)
 ];

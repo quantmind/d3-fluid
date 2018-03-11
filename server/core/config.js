@@ -10,7 +10,7 @@ const CWD = process.cwd();
 
 const defaults = {
     env: process.env.NODE_ENV || 'dev',
-    static: '/static',
+    static: ['static'],
     scripts: ['/static/site.js'],
     bodyExtra: [],
     stylesheets: ['/static/site.css']

@@ -9,6 +9,9 @@ module.exports = {
         analyticsId: 'UA-110136266-3'
     },
     github: "quantmind/d3-fluid",
+    static: [
+        ['/static', 'build']
+    ],
     markdown: {
         paths: [
             {

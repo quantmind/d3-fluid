@@ -2,6 +2,8 @@ import {viewSlugify} from 'd3-view';
 
 import {icon} from '../icons/index';
 
+import './_main.scss';
+
 
 export default {
     components: {icon},
@@ -11,7 +13,7 @@ export default {
         anchorIcon: 'link'
     },
 
-    render (props, attrs, el) {
+    render (el) {
         let marked, hl, markedOptions;
 
         const

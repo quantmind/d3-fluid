@@ -61,6 +61,7 @@
         "rollup": "0.56",
         "rollup-plugin-commonjs": "9.0",
         "rollup-plugin-json": "2.3",
+        "rollup-plugin-node-resolve": "3.2",
         "rollup-plugin-postcss": "1.3",
         "rollup-plugin-sass": "0.6",
         "rollup-plugin-sourcemaps": "0.4",
@@ -72,14 +73,15 @@
     "scripts": {
         "lint": "eslint dev test server app components",
         "test:unit": "jest -c dev/jest.config.json",
-        "test": "npm run-script lint",
+        "test": "npm run-script lint && test:unit",
+        "css": "sass ",
         "dev": "rollup -c dev/rollup.config.js -w",
         "reload": "livereload static",
         "serve-dev": "nodemon -w siteConfig.js ./bin/d3fluid -- --debug",
-        "watch": "export NODE_ENV=DEV && npm-run-all --parallel reload serve-dev dev",
+        "watch": "export NODE_ENV=dev && npm-run-all --parallel reload serve-dev dev",
         "serve": "./bin/d3fluid",
         "postpublish": "VERSION=`node -e 'console.log(require(\"./package.json\").version)'`; git push && git tag -am \"Release $VERSION.\" v${VERSION} && git push --tags && mkdir -p ../giottojs.org/latest && mkdir -p ../giottojs.org/d3-view/${VERSION} && cp build/* ../giottojs.org/d3-view/${VERSION}/ && cp build/* ../giottojs.org/latest/ && cd ../giottojs.org && git add d3-view/${VERSION} latest && git commit -a -m \"d3-view ${VERSION}\" && git push",
         "release": "publish",
-        "prepare": "cp ./node_modules/navigo/lib/navigo.es.js components/router/navigo.js && cp ./node_modules/feather-icons/dist/icons.json components/icons/icons.json && rollup -c dev/rollup.config.js"
+        "prepare": "cp ./node_modules/navigo/lib/navigo.es.js components/router/navigo.js && cp ./node_modules/feather-icons/dist/icons.json components/icons/icons.json && rollup -c dev/rollup.config.js && view-require -c dev/require.config.js"
     }
 }

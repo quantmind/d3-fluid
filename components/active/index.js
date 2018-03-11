@@ -1,5 +1,3 @@
-import {viewEvents} from 'd3-view';
-
 
 export default {
 
@@ -39,6 +37,6 @@ export default {
 
 //
 // Make sure the currentUrl attribute is a reactive attribute
-viewEvents.on('component-mount.currentUrl', vm => {
-    if (!vm.parent) vm.model.currentUrl = vm.ownerDocument.location.href;
-});
+//viewEvents.on('component-mount.currentUrl', vm => {
+//    if (!vm.parent) vm.model.currentUrl = vm.ownerDocument.location.href;
+//});

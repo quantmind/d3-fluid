@@ -1,5 +1,4 @@
 import {assign} from 'd3-let';
-import {viewEvents} from 'd3-view';
 
 import {dispatch} from 'd3-dispatch';
 
@@ -42,8 +41,8 @@ export default {
         });
 
         // Add router to all components which are part of the vm view
-        viewEvents.on('component-mount.router', cm => {
-            if (cm.root === vm) cm.router = router;
+        vm.events.on('mount.router', cm => {
+            cm.router = router;
         });
 
         // auto resolve

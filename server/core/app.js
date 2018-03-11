@@ -19,11 +19,16 @@ export const plugins = [
 export default function (siteConfig) {
     siteConfig = readConfig(siteConfig);
 
-    const app = express();
+    const app = express().disable('x-powered-by');
     app.config = siteConfig;
     app.config.env = ENV;
 
-    app.use(siteConfig.static, express.static('static'));
+    siteConfig.static.forEach(path  => {
+        if (typeof path === 'string')
+            app.use(express.static(path));
+        else
+            app.use(path[0], express.static(path[1]));
+    });
     siteConfig.plugins = [];
 
     plugins.forEach(plugin => {
