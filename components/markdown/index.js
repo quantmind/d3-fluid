@@ -2,8 +2,6 @@ import {viewSlugify} from 'd3-view';
 
 import {icon} from '../icons/index';
 
-import './_main.scss';
-
 
 export default {
     components: {icon},
@@ -17,10 +15,10 @@ export default {
         let marked, hl, markedOptions;
 
         const
-            classes = attrs.class || 'markdown',
+            props = this.props,
             compile = source => {
                 source = source ? marked(source, markedOptions) : '';
-                return this.createElement('div').attr('class', classes).html(source);
+                return this.createElement('div', true).classed('markdown', true).html(source);
             };
 
         return Promise.all([this.require('marked'), this.require('highlightjs')]).then(libs => {

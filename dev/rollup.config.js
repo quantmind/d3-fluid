@@ -2,7 +2,6 @@ import json from 'rollup-plugin-json';
 import sourcemaps from 'rollup-plugin-sourcemaps';
 import commonjs from 'rollup-plugin-commonjs';
 import resolve from 'rollup-plugin-node-resolve';
-import sass from 'rollup-plugin-sass';
 import string from 'rollup-plugin-string';
 import uglify from 'rollup-plugin-uglify';
 
@@ -34,7 +33,6 @@ const bundle = (entry, file, externals, min) => {
             string({
                 include: '**/*.html'
             }),
-            sass(),
             resolve()
         ]
     };

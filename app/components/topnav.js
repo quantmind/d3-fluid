@@ -7,13 +7,15 @@ const template = ctx => {
             <nav class="navbar navbar-expand-${ctx.collapse} ${ctx.theme}">
                 <a class="navbar-brand" href="/" html="${ctx.brand}"></a>
                 <ul class="navbar-nav ml-auto">
-                    ${ctx.navigationRight.map(item => {
-                        return (`
-                            <li class="nav-item">
-                                <a class="nav-link" href="${item.href}">${item.name}</a>
-                            </li>
-                        `);
-                    }).join('\n')}
+                    ${
+                        ctx.navigationRight.map(item => {
+                            return (`
+                                <li class="nav-item">
+                                    <a class="nav-link" href="${item.href}">${item.name}</a>
+                                </li>
+                            `);
+                        }).join('\n')
+                    }
                 </ul>
             </nav>
             <markdown>${ctx.content}</markdown>
@@ -31,7 +33,7 @@ export default {
         navigationRight: []
     },
 
-    render (props, attrs, el) {
+    render (el) {
         const
             content = this.select(el).html(),
             footer = '',

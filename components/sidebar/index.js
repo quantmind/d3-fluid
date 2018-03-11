@@ -49,12 +49,12 @@ export default {
         };
     },
 
-    render (props, attrs, el) {
+    render (el) {
         var model = this.model;
         asItems(model, model.primaryItems);
         asItems(model, model.secondaryItems);
         asItems(model, model.navbarItems);
-        props.sidebarContent = this.select(el).html();
+        this.props.sidebarContent = this.select(el).html();
         return tpl;
     }
 };

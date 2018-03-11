@@ -17,6 +17,7 @@ export default {
 
 
 function bindMeta (vm) {
+    if (vm.parent) return;
     var head = vm.select('head');
 
     vm.model.metadata.$on(() => {
