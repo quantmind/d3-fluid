@@ -6,7 +6,7 @@ Type a message on the right and see the alert appearing on the left.
 Same messages with same level are not repeated, instead a counter is added.
 
 <div class="container-float">
-    <div class="row">
+    <div class="row" d3-alerts>
         <div class="col-sm-6">
             <alerts data-transition-duration=250></alerts>
         </div>

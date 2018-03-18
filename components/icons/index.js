@@ -38,7 +38,7 @@ export const icon = {
     render () {
         const props = this.props;
         if (props.src)
-            return this.createElement('img').attr('alt', props.name || '').attr('src', props.src);
+            return this.createElement('img', true).attr('alt', props.name || '').attr('src', props.src);
 
         const width = props.width || icons.width,
             height = props.height || icons.height,
@@ -46,7 +46,7 @@ export const icon = {
         if (!name) return '<i/>';
         const svg = icons.svg[name];
         if (!svg) return '<i/>';
-        return this.createElement('div')
+        return this.createElement('div', true)
             .append('svg')
             .attr('height', height)
             .attr('width', width)

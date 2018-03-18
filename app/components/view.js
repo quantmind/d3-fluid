@@ -7,8 +7,8 @@ export default function (vm) {
         .use(viewBootstrapForms)
         .use(viewModal)
         .use(viewRouter)
+        .use(viewAlert)
         .use(viewIcons);
 
     vm.addComponent('markdown', viewMarked);
-    vm.addComponent('alerts', viewAlert);
 }

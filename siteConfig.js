@@ -32,20 +32,20 @@ module.exports = {
                 meta: {
                     slug: "",
                     path: "./site",
-                    template: "topnav"
-                },
-                topnav: {
-                    brand: "d3-fluid",
-                    navigationRight: [
-                        {
-                            "name": "components",
-                            "href": "/components"
-                        },
-                        {
-                            "name": "docs",
-                            "href": "/docs"
-                        }
-                    ]
+                    template: "topnav",
+                    topnav: {
+                        brand: "d3-fluid",
+                        navigationRight: [
+                            {
+                                "name": "components",
+                                "href": "/components"
+                            },
+                            {
+                                "name": "docs",
+                                "href": "/docs"
+                            }
+                        ]
+                    }
                 }
             }
         ]

@@ -1,8 +1,8 @@
 <div class="alert-messages">
-  <div class="alert" d3-for="msg in messages" d3-class="$messageClass(msg)" data-transition-duration="{{ transitionDuration }}">
+  <div class="alert" d3-for="msg in alertMessages" d3-class="$messageClass(msg)" data-transition-duration="{{ transitionDuration }}">
     <span d3-html="msg.message"></span>
     <span class="badge badge-light" d3-if="msg.count > 1" d3-html="msg.count" style="display: inline-block;"></span>
-    <button type="button" class="close" aria-label="Close" d3-on="$close(msg)">
+    <button type="button" class="close" aria-label="Close" d3-on="$emit('alertMessageClose', msg)">
       <span aria-hidden="true">×</span>
     </button>
   </div>

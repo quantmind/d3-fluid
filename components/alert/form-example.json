@@ -17,7 +17,7 @@
         {
             "type": "submit",
             "attributes": {
-                "d3-on": "$event.preventDefault() && root.$alertMessage($inputData())"
+                "d3-on": "$event.preventDefault() && $emit('alertMessageAdd', props.form.$inputData())"
             }
         }
     ]

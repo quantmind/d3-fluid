@@ -11,68 +11,75 @@ const levels = {
 
 const messageKey = msg => `${msg.level}::${msg.message}`;
 
+const alertDirective = {
 
-// component render function
-export default {
+    mount (model) {
+        // event handler for adding messages
+        model.$alertMessageAdd = addMessage;
+        model.$alertMessageClose = closeMessage;
+        model.$$messageIds = new Map;
+        // messages
+        model.$set('alertMessages', []);
+    }
+};
+
+// component
+const alertMessages = {
 
     props: {
         transitionDuration: 0
     },
 
-    model () {
-        return {
-            messages: [],
-
-            $messageClass (message) {
-                return 'alert-' + (levels[message.level] || message.level);
-            },
-
-            $close (msg) {
-                var messages = this.messages;
-
-                delete this.$$messageIds[messageKey(msg)];
-
-                for (let i=0; i<messages.length; ++i) {
-                    if (msg === messages[i]) {
-                        this.messages = messages.slice();
-                        this.messages.splice(i, 1);
-                        break;
-                    }
-                }
-            }
-        };
+    model: {
+        $messageClass (message) {
+            return 'alert-' + (levels[message.level] || message.level);
+        }
     },
 
     render () {
-
-        var model = this.model,
-            messages = model.messages.splice(0),
-            messageIds = {},
-            root = model.isolatedRoot;
-
-        model.$$messageIds = messageIds;
-
-        root.$alertMessage = onMessage;
-
-        messages.forEach(onMessage);
-
-        function onMessage (data) {
-            if (!data) return;
-            if (isString(data)) data = {message: data};
-            if (data.message) {
-                if (!data.level) data.level = 'info';
-                var key = messageKey(data),
-                    msg = messageIds[key];
-                if (msg) msg.count += 1;
-                else {
-                    data.count = 1;
-                    msg = model.$new(data);
-                    messageIds[key] = msg;
-                    model.$push('messages', msg);
-                }
-            }
-        }
-
+        this.model.$connect('alertMessages');
         return tpl;
     }
 };
+
+
+export default {
+
+    install (vm) {
+        vm.addComponent('alerts', alertMessages);
+        vm.addDirective('alerts', alertDirective);
+    }
+};
+
+
+function addMessage (data) {
+    if (!data) return false;
+    if (isString(data)) data = {message: data};
+    if (data.message) {
+        if (!data.level) data.level = 'info';
+        var key = messageKey(data),
+            msg = this.$$messageIds.get(key);
+        if (msg) msg.count += 1;
+        else {
+            data.count = 1;
+            msg = this.$new(data);
+            this.$$messageIds.set(key, msg);
+            this.$push('alertMessages', msg);
+        }
+    }
+    return false;
+}
+
+
+function closeMessage (msg) {
+    var messages = this.alertMessages;
+    this.$$messageIds.delete(messageKey(msg));
+
+    for (let i=0; i<messages.length; ++i) {
+        if (msg === messages[i]) {
+            this.alertMessages = messages.slice();
+            this.alertMessages.splice(i, 1);
+            break;
+        }
+    }
+}
