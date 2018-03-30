@@ -22,7 +22,10 @@ function template (ctx) {
 const markdownRoute = {
     render () {
         const url = this.router.lastRouteResolved().url;
-        return `<markdown source="${url}.md"></markdown>`;
+        return this.json(`${url}.json`).then(response => {
+            const data = response.data;
+            return `<markdown>${data.content}</markdown>`;
+        });
     }
 };
 

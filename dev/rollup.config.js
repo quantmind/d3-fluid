@@ -7,9 +7,10 @@ import uglify from 'rollup-plugin-uglify';
 
 import {dependencies} from '../package.json';
 
-const externals = Object.keys(dependencies).concat(['fs', 'path', 'console']);
-const externalsApp = ['d3-dispatch', 'd3-ease', 'd3-selection', 'd3-timer', 'd3-transition', 'handlebars'];
-const externalsComponent = externalsApp.concat(['d3-let', 'd3-view']);
+const externals = Object.keys(dependencies).concat(['fs', 'path', 'console', 'd3-let']);
+const externalsCli = ['d3-dispatch', 'd3-ease', 'd3-selection', 'd3-timer', 'd3-transition', 'handlebars'];
+const externalsComponent = externalsCli.concat(['d3-let', 'd3-view']);
+const externalsApp = externalsCli.concat(['d3-view']);
 
 
 const bundle = (entry, file, externals, min) => {
