@@ -1530,20 +1530,20 @@ d3-view-test@0.3:
     d3-view "^1.3.3"
     jsdom "11.6"
 
-d3-view@1.4:
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/d3-view/-/d3-view-1.4.0.tgz#1116e216beabeb3be7e057a3f4fc833974a3f8e6"
+d3-view@^1.3.3:
+  version "1.3.3"
+  resolved "https://registry.yarnpkg.com/d3-view/-/d3-view-1.3.3.tgz#90704e7d0178536ba0956c7d595c462601c856bd"
   dependencies:
-    commander "2.15"
     d3-dispatch "1.0"
     d3-let "0.4"
     d3-selection "1.3"
     d3-timer "1.0"
 
-d3-view@^1.3.3:
-  version "1.3.3"
-  resolved "https://registry.yarnpkg.com/d3-view/-/d3-view-1.3.3.tgz#90704e7d0178536ba0956c7d595c462601c856bd"
+d3-view@^1.4.1:
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/d3-view/-/d3-view-1.4.1.tgz#dd9408953f88f68d6fb6ec4df8ddf1df0b02d680"
   dependencies:
+    commander "2.15"
     d3-dispatch "1.0"
     d3-let "0.4"
     d3-selection "1.3"
