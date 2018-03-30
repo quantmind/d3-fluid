@@ -12,7 +12,6 @@ export default {
             if (isAbsoluteUrl(href)) return;
             self.navigate(model, href, event);
         });
-        return model;
     },
 
     navigate (model, href, event) {

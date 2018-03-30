@@ -8,15 +8,28 @@ function template (ctx) {
             data-brand-url="/"
             data-navbar-title="title"
             data-navbar-title-Url="currentUrl">
-            <markdown>${ctx.content}</markdown>
+            <routes>
+                <markdown-route path="/components/:name">
+                    <markdown>${ctx.content}</markdown>
+                </markdown-route>
+            </routes>
             ${ctx.footer}
         </sidebar>
     `);
 }
 
 
+const markdownRoute = {
+    render () {
+        const url = this.router.lastRouteResolved().url;
+        return `<markdown source="${url}.md"></markdown>`;
+    }
+};
+
+
 export default {
     components: {
+        markdownRoute,
         sidebar: viewSidebar
     },
 
@@ -37,7 +50,7 @@ export default {
         if (!sidenav.primaryItems)
             return this.json('nav.json').then(response => {
                 sidenav.$set('primaryItems', response.data);
-                return template({content, footer});
+                return template({content, footer, path: this.props.path});
             });
         else
             return template({content, footer});

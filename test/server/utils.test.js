@@ -1,4 +1,4 @@
-import {resolve} from '../server/utils/path';
+import {resolve} from '../../server/utils/path';
 
 
 describe('server utils', () => {

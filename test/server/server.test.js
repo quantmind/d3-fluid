@@ -1,7 +1,7 @@
 import request from "supertest";
 
-import createApp from "../server/core/app";
-import './utils';
+import createApp from "../../server/core/app";
+import '../utils';
 
 
 describe('Server', () => {

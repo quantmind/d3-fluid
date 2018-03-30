@@ -38,27 +38,15 @@ To use the component simply include it in the components object of a view.
 import {view} from 'd3-view';
 import {viewAlert} from 'd3-view-components';
 
-var vm = view({
-    components: {
-        alerts: viewAlert,
-        ...
-    }
-});
+var vm = view().use(viewAlert);
 await vm.mount('body');
 ```
-
-```html
-<alerts data-messages='["simple message"]'></alerts>
+The ``d3-alerts`` directive should be placed in the outer HTML element for collecting messages.
+From components which are descendant of this outer HTML element it is possible to ``$emit`` messages
+```javascript
+$emit('alertMessageAdd', {level: "success", message: "It worked!"});
 ```
-<alerts data-messages='["simple message"]'></alerts>
-
-The ``alerts`` component finds the first ``isolatedRoot`` of the model and
-add the ``$alertMessage`` hook which listen for ``alertMessage`` custom events
-form all its children models.
-
-In the above example, the ``isolated`` component make sure the view model
-is isolated to that example so no other messages triggered anywhere
-else in the application are displayed in the child ``alerts`` component.
+Messages are then displayed by the ``alerts`` component (which must be a descendant of the outer HTML element hosting the ``d3-alert`` directive).
 
 ### Javascript Usage
 
@@ -69,12 +57,11 @@ model.$emit('alertMessage', 'Hi!');
 To display messages with different levels:
 ```javascript
 model.$emit('alertMessage', {
-    message: '<strong>Warning!</strong> This is a wrning message'
+    message: '<strong>Warning!</strong> This is a warning message'
     level: 'warning'
 });
 model.$emit('alertMessage', {
     message: '<strong>Danger!</strong> Something very wrong'
     level: 'danger'
 });
-
 ```

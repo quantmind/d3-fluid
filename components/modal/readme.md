@@ -19,15 +19,22 @@ custom options.
 
 A simple dialog
 ```html
-<button class="btn btn-primary" d3-on='$openModal("#simple-modal")'><button>
+<button class="btn btn-primary" d3-on="$emit('openModal', '#simple-modal')">Open modal</button>
 <div id="simple-modal" class="d-none">
-    <modal-title>Simple modal</modal-title>
+    <modal-header>Simple modal</modal-header>
     <modal-body>Demonstrate a simple modal component using d3-view</modal-body>
+    <modal-footer>
+        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-secondary" d3-on="$emit('hideModal')">Close</button>
+    </modal-footer>
 </div>
 ```
-<button class="btn btn-primary" d3-on="$openModal('#simple-modal')">Open modal</button>
-<br>
+<button class="btn btn-primary" d3-on="$emit('openModal', '#simple-modal')">Open modal</button>
 <div id="simple-modal" class="d-none">
-    <modal-title>Simple modal</modal-title>
+    <modal-header>Simple modal</modal-header>
     <modal-body>Demonstrate a simple modal component using d3-view</modal-body>
+    <modal-footer>
+        <button type="button" class="btn btn-primary" d3-on="$emit('hideModal')">Save changes</button>
+        <button type="button" class="btn btn-secondary"  d3-on="$emit('hideModal')">Close</button>
+    </modal-footer>
 </div>

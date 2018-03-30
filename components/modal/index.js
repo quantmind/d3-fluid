@@ -1,10 +1,11 @@
 import {easeExpOut} from 'd3-ease';
-import {isString} from 'd3-let';
 
-import tpl from './template.html';
 import modalHeader from './header';
 import modalBody from './body';
 import modalFooter from './footer';
+
+
+const ESCAPE_KEY = 27;
 
 
 const modalComponent = {
@@ -20,39 +21,40 @@ const modalComponent = {
 
     model: {
         showModal: false,
-        $showModal () {
+        innerHtml: '',
+        $showModal (innerHtml) {
+            if (innerHtml) this.innerHtml = innerHtml;
             this.showModal = true;
         },
         $hideModal () {
             this.showModal = false;
-        },
-        $actionClass (action) {
-            return action.level ? `btn-${action.level}` : 'btn-secondary';
-        },
-        $action (action) {
-            if (action.$action) action.$action();
-            else this.$hideModal();
-        },
-        $actionLabel (action) {
-            var html = action.icon ? `<i class='${action.icon}'></i> ` : '';
-            return `${html}${action.label}`;
         }
     },
 
-    render (el) {
+    render () {
         var props = this.props;
+        this.on(this.ownerDocument, 'keydown.modal', this.maybeHide.bind(this));
         return (`
-            <div class="d3-view-modal">
+            <div id="d3-view-modal">
                 <div class="modal" tabindex="-1" role="dialog" d3-modal="showModal" data-transition-duration="${props.transitionDuration}">
                     <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                        ${el.innerHTML}
+                        <div class="modal-content" d3-html="innerHtml">
                         </div>
                     </div>
                 </div>
                 <div class="modal-backdrop fade" d3-modal="showModal" data-transition-duration="${props.transitionDuration}"></div>
             </div>
         `);
+    },
+
+    maybeHide (e) {
+        switch(e.keyCode) {
+        case ESCAPE_KEY:
+            this.model.$hideModal();
+            break;
+        default:
+            break;
+        }
     }
 };
 
@@ -90,25 +92,21 @@ const modalDirective = {
 };
 
 
-// function for opening a modal
-// inject this method to the root model
-const modalOpen = (vm) => {
-
-    return options => {
-        if (isString(options)) options = optionsFromTarget(vm, options);
-        var modal = vm.select('#d3-view-modal');
-        if (!modal.size())
-            vm.select('body').append('modal').mount(options).then(cm => cm.model.$showModal());
-        else
-            modal.model().$update(options).$showModal();
-    };
-};
-
-
 const viewModal = {
     modalComponent,
     modalDirective,
-    modalOpen,
+    modalOpen (innerHtml) {
+        const vm = this.$$view;
+        const se = vm.select(innerHtml);
+        if (se.size()) innerHtml = se.html();
+        var modal = vm.select('#d3-view-modal');
+        if (!modal.size())
+            vm.sel.append('modal').mount().then(() => {
+                vm.select('#d3-view-modal').model().$showModal(innerHtml);
+            });
+        else
+            modal.model().$showModal(innerHtml);
+    },
 
     install (vm) {
         vm.addComponent('modal', viewModal.modalComponent);
@@ -119,19 +117,3 @@ const viewModal = {
 
 
 export default viewModal;
-
-
-const optionsFromTarget = (vm, selector) => {
-    var sel = vm.select(selector);
-    if (sel.size() === 1) {
-        return {
-            modalTitle: textFromTarget(sel.select('modal-title')),
-            modalBody: textFromTarget(sel.select('modal-body'))
-        };
-    } else {
-        vm.logWarn(`Could not obtain target from selector "${selector}"`);
-        return {};
-    }
-};
-
-const textFromTarget = sel => sel.size() ? sel.html() : '';

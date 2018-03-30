@@ -1,6 +1,6 @@
 import express from 'express';
 import mime from 'mime-types';
-import {existsSync, readFileSync, lstatSync} from 'fs';
+import {readFile, lstat, exists} from 'fs-extra';
 import {join} from 'path';
 import {compile} from 'handlebars';
 import {viewSlugify} from 'd3-view';
@@ -92,9 +92,9 @@ function markdown (cfg, plugins, siteConfig) {
         tryFile(index, res, next);
     });
 
-    app.use('/*', (req, res, next) => {
+    app.use('/*', async (req, res, next) => {
         debug(req.params[0]);
-        tryFile(req.params[0], res, next);
+        await tryFile(req.params[0], res, next);
     });
 
     debug('Markdown micro-site');
@@ -102,33 +102,39 @@ function markdown (cfg, plugins, siteConfig) {
 
     return app;
 
-    function tryFile (name, res, next) {
+    async function tryFile (name, res, next) {
         let path = cfg.meta.path,
-            file = join(path, name);
+            file = join(path, name),
+            json = false;
 
-        if (existsSync(file)) {
-            const stat = lstatSync(file);
+        if (!(await exists(file))) {
+            const bits = file.split('.');
+            json = bits.length > 1 ? bits.pop() === 'json' : false;
+            if (json) file = bits.join('');
+        }
+
+        if (await exists(file)) {
+            const stat = await lstat(file);
             if (stat.isDirectory()) file = join(file, index);
         }
 
         debug(`try loading from "${file}"`);
 
-        let render = false;
-        if (!existsSync(file)) {
+        if (!(await exists(file))) {
             file = `${file}.md`;
-            render = true;
-            if (!existsSync(file)) {
+            if (!(await exists(file))) {
                 next();
                 return;
             }
         }
 
-        const ext = file.split('.').pop();
-        let text = readFileSync(file, 'utf8');
+        const bits = file.split('.');
+        const ext = bits.length > 1 ? bits.pop() : 'txt';
+        let text = await readFile(file, 'utf8');
 
         if (ext === 'md') {
             let context = Object.assign({name}, extractMetadata(text));
-            if (render) {
+            if (!json) {
                 context = JSON.parse(JSON.stringify(Object.assign({}, cfg, context)));
                 pop(context.meta, 'path');
                 pop(context.meta, 'index');
@@ -145,7 +151,7 @@ function markdown (cfg, plugins, siteConfig) {
                 if (context.content.indexOf(TABLE_OF_CONTENTS_TOKEN) !== -1)
                     context.content = insertTableOfContents(context.content);
             }
-            if (render) text = renderDoc(context, siteConfig);
+            if (!json) text = renderDoc(context, siteConfig);
             else {
                 res.setHeader('Content-Type', 'application/json');
                 text = JSON.stringify(context);

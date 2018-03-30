@@ -1,8 +1,8 @@
 import {view} from 'd3-view';
 
-import {metadata} from "../app/index";
+import {metadata} from "../../app/index";
 
-import './utils';
+import '../utils';
 
 
 describe('Test script', () => {

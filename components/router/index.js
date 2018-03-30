@@ -9,8 +9,8 @@ import Navigo from './navigo';
 
 export default {
 
-    install (vm, config) {
-        config = config || {};
+    install (vm) {
+        const config = vm.props.routerConfig || {};
         var events = dispatch('before', 'after', 'leave'),
             baseUrl = vm.providers.resolve(config.basePath || '/'),
             router = new Navigo(baseUrl);

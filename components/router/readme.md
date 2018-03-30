@@ -5,15 +5,9 @@ Navigo is a simple minimalistic JavaScript router with a fallback for older brow
 Simply ``use`` the plugin and configure it for you needs
 ```javascript
 import {view} from 'd3-view';
-import {viewRouter} from {d3-view-components}
+import {viewRouter} from {d3-fluid}
 
-const config = {
-    routes (vm) {
-        ...
-    }
-};
-
-var vm = view().use(viewRouter, config);
+var vm = view().use(viewRouter);
 await vm.mount('body');
 ```
 

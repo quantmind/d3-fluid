@@ -25,7 +25,14 @@ module.exports = {
                 meta: {
                     slug: "components",
                     path: "./components",
-                    template: "sidenav"
+                    template: "sidenav",
+                    sidenav: {
+                        routes: {
+                            "/components/:name": {
+                                component: "<markdown source='/components/{{ name }}.md'></markdown>"
+                            }
+                        }
+                    }
                 }
             },
             {
