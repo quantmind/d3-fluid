@@ -1,0 +1,26 @@
+$fl-inner-max-width: 1200px !default;
+$sidenav-content-padding: 20px 30px;
+
+
+@import '../components/index';
+@import 'bootstrap/scss/bootstrap';
+@import 'highlightjs/styles/dracula';
+
+
+.fl-inner {
+    max-width: $fl-inner-max-width;
+}
+
+#root {
+    opacity: 0;
+}
+
+
+.docs {
+    .markdown {
+        h2 {
+            border-bottom: 1px solid #eaecef;
+            padding-bottom: 0.3em;
+        }
+    }
+}

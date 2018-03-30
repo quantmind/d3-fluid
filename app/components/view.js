@@ -1,5 +1,5 @@
 import {viewForms, viewBootstrapForms} from 'd3-view';
-import {viewMarked, viewRouter, viewAlert, viewModal, viewIcons} from 'd3-view-components';
+import {viewMarked, viewRouter, viewAlert, viewModal, viewIcons} from '../../components/index';
 
 
 export default function (vm) {
@@ -7,8 +7,8 @@ export default function (vm) {
         .use(viewBootstrapForms)
         .use(viewModal)
         .use(viewRouter)
+        .use(viewAlert)
         .use(viewIcons);
 
     vm.addComponent('markdown', viewMarked);
-    vm.addComponent('alerts', viewAlert);
 }

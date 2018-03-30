@@ -23,7 +23,8 @@
         "server/index.js"
     ],
     "transform": {
-        "^.+\\.jsx?$": "babel-jest"
+        "^.+\\.jsx?$": "babel-jest",
+        "^.+\\.html?$": "html-loader-jest"
     },
     "coverageThreshold": {
         "global": {

@@ -1,0 +1,17 @@
+<div class="tabs-container">
+    <ul class="nav" d3-class="tabClass">
+        <li d3-for="tab in tabItems" class="nav-item">
+            <a class="nav-link"
+                d3-attr-href="tab.href"
+                d3-html="tab.label"
+                d3-on-click="$selectTab(tab)"
+                d3-active="tab.active"
+                data-active-strict>
+            </a>
+        </li>
+    </ul>
+    <div class="nav-target"
+        d3-html="tabTarget"
+        data-transition-duration={{tabTransitionDuration}}>
+    </div>
+</div>

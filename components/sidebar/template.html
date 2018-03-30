@@ -1,0 +1,48 @@
+<div id="{{ id }}-container" class="sidebar">
+  <div id="{{ id }}" class="sidebar-wrapper d-print-none width collapse show" data-container="padding-left">
+    <ul class="list-group">
+      <a class="sidebar-brand" href="{{ brandUrl }}">{{ brand }}</a>
+      <group d3-for="item in primaryItems"></group>
+    </ul>
+    <div class="list-group bottom">
+      <a d3-for="item in secondaryItems"
+        class='list-group-item list-group-item-action compact'
+        d3-attr-href="item.href"
+        d3-html="item.name"
+        d3-link>
+      </a>
+    </div>
+  </div>
+  <div class="content-wrapper">
+    <nav class="sidebar-navbar navbar {{ classes }}">
+      <a class="navbar-toggler btn btn-default mr-2" href="#"
+        aria-controls="{{ id }}"
+        aria-expanded="true"
+        aria-label="toggle sidebar"
+        d3-if="sidebarToggle"
+        d3-html="sidebarToggle"
+        d3-collapse></a>
+      <a class="navbar-brand mr-auto"
+        d3-if="navbarTitle"
+        d3-attr-href="navbarTitleUrl"
+        d3-html="navbarTitle"
+        data-transition-duration=150></a>
+      <ul class="nav navbar-nav">
+        <li d3-for="item in navbarItems" class="nav-item">
+          <a class="nav-link"
+            d3-attr-href="item.href || '#'"
+            d3-html="item.title"
+            d3-if="item.show ? item.show() : true"
+            d3-on-click="item.click ? item.click() : null"
+            d3-active>
+            <i d3-class="item.icon" aria-hidden="true"></i>
+            <span d3-html="item.label || item.name" d3-if="item.showLabel !== false"></span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <div class="content-main">
+    {{{sidebarContent}}}
+    </div>
+  </div>
+</div>

@@ -1,0 +1,15 @@
+{
+    "children": [
+        {
+            "name": "name",
+            "label": "Full name"
+        },
+        {
+            "name": "dob",
+            "label": "Date of birth",
+            "attributes": {
+                "d3-flatpickr": {}
+            }
+        }
+    ]
+}
