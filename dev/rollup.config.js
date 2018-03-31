@@ -44,6 +44,18 @@ const bundle = (entry, file, externals, min) => {
 
 export default [
     {
+        input: 'server/api.js',
+        external: externals,
+        output: {
+            file: 'build/d3-fluid-server.js',
+            sourcemap: true,
+            format: 'cjs'
+        },
+        plugins: [
+            json()
+        ]
+    },
+    {
         input: 'server/index.js',
         external: externals,
         output: {

@@ -11,6 +11,7 @@ const CWD = process.cwd();
 const defaults = {
     name,
     env: process.env.NODE_ENV || 'production',
+    sitemap: true,
     static: ['static'],
     scripts: ['/static/site.js'],
     bodyExtra: [],

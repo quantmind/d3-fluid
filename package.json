@@ -17,7 +17,7 @@
         "url": "https://github.com/quantmind/d3-fluid.git"
     },
     "engines": {
-        "node": ">= 6.0"
+        "node": ">= 8.0"
     },
     "main": "build/d3-fluid.js",
     "module": "app/index",
