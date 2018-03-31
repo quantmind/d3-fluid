@@ -14,8 +14,6 @@ import extractMetadata from '../utils/meta';
 export default {
 
     init (app) {
-        if (!app.config.markdown) return;
-
         const
             plugins = app.config.markdown.plugins,
             paths = app.config.markdown.paths || [];
@@ -137,7 +135,7 @@ function markdown (app, cfg) {
                 context = JSON.parse(JSON.stringify(Object.assign({}, cfg, context)));
                 pop(context.meta, 'path');
                 pop(context.meta, 'index');
-            }
+            } else context.meta = {};
 
             app.config.plugins.forEach(plugin => {
                 if (plugin.context) plugin.context(app, context, cfg);
