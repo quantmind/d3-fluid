@@ -45,7 +45,7 @@ export const serve = config => {
             const app = createApp(this);
             tcpPortUsed.check(this.port, 'localhost').then(inUse => {
                 if (inUse) {
-                    app.logger.error(`Port ${this.port} is in use`);
+                    app.logger.error(`port ${this.port} is in use`);
                     process.exit(1);
                 } else {
                     app.listen(this.port, () => {
