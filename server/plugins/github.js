@@ -1,7 +1,7 @@
 export default {
 
-    context (ctx, cfg, siteConfig) {
+    context (app, ctx) {
         if (ctx.meta)
-            ctx.meta.github = siteConfig.github;
+            ctx.meta.github = app.config.github;
     }
 };

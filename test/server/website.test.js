@@ -9,7 +9,7 @@ const CWD = process.cwd();
 
 describe('Website', () => {
 
-    var app = createApp('siteConfig.js');
+    var app = createApp({config: 'siteConfig.js'});
 
     test('meta', () => {
         expect(app).toBeTruthy();

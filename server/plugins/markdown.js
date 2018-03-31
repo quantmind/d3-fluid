@@ -8,37 +8,36 @@ import {pop} from 'd3-let';
 
 // import {JSDOM} from 'jsdom';
 import extractMetadata from '../utils/meta';
-import debug from '../utils/debug';
 
 //
 //  Serve markdown pages matching a pattern
 export default {
 
-    init (app, siteConfig) {
-        if (!siteConfig.markdown) return;
+    init (app) {
+        if (!app.config.markdown) return;
 
         const
-            plugins = siteConfig.markdown.plugins,
-            paths = siteConfig.markdown.paths || [];
+            plugins = app.config.markdown.plugins,
+            paths = app.config.markdown.paths || [];
 
         paths.forEach(cfg => {
             const slug = cfg.meta.slug || '';
-            app.use(`/${slug}`, markdown(cfg, plugins, siteConfig));
+            app.use(`/${slug}`, markdown(app, cfg, plugins));
         });
     },
 
-    context (ctx, cfg, siteConfig) {
-        if (ctx.name == cfg.meta.index) ctx.title = cfg.title || siteConfig.title;
+    context (app, ctx, cfg) {
+        if (ctx.name == cfg.meta.index) ctx.title = cfg.title || app.config.title;
         else ctx.title = ctx.name;
-        if (ctx.meta) ctx.meta.env = siteConfig.env;
+        if (ctx.meta) ctx.meta.env = app.config.env;
     }
 };
 
 
-function docTemplate (ctx, siteConfig) {
-    const css = siteConfig.stylesheets.slice(),
-        scripts = siteConfig.scripts.map(script => `<script src="${script}"></script>`).join('\n'),
-        bodyExtra = siteConfig.bodyExtra.join('\n'),
+function docTemplate (app, ctx) {
+    const css = app.config.stylesheets.slice(),
+        scripts = app.config.scripts.map(script => `<script src="${script}"></script>`).join('\n'),
+        bodyExtra = app.config.bodyExtra.join('\n'),
         tag = pop(ctx.meta, 'template') || 'markdown',
         content = pop(ctx, 'content').trim(),
         highlightTheme = pop(ctx, 'highlightTheme'),
@@ -71,9 +70,9 @@ function docTemplate (ctx, siteConfig) {
 }
 
 
-function renderDoc (ctx, siteConfig) {
+function renderDoc (app, ctx) {
     ctx.metadata = JSON.stringify(ctx.metadata);
-    return docTemplate(ctx, siteConfig);
+    return docTemplate(app, ctx);
     //const dom = new JSDOM(
     //    docTemplate(ctx),
     //    {runScripts: "dangerously"}
@@ -84,23 +83,22 @@ function renderDoc (ctx, siteConfig) {
 
 //
 //  Markdown micro site
-function markdown (cfg, plugins, siteConfig) {
-    const app = express(),
+function markdown (app, cfg) {
+    const mdApp = express().disable('x-powered-by'),
         index = cfg.meta.index;
 
-    app.get('/', (req, res, next) => {
-        tryFile(index, res, next);
+    mdApp.get('/', async (req, res, next) => {
+        await tryFile(index, res, next);
     });
 
-    app.use('/*', async (req, res, next) => {
-        debug(req.params[0]);
+    mdApp.use('/*', async (req, res, next) => {
         await tryFile(req.params[0], res, next);
     });
 
-    debug('Markdown micro-site');
-    debug(cfg);
+    app.logger.debug('Markdown micro-site');
+    if (app.config.debug) app.logger.debug(JSON.stringify(cfg, null, 4));
 
-    return app;
+    return mdApp;
 
     async function tryFile (name, res, next) {
         let path = cfg.meta.path,
@@ -118,7 +116,8 @@ function markdown (cfg, plugins, siteConfig) {
             if (stat.isDirectory()) file = join(file, index);
         }
 
-        debug(`try loading from "${file}"`);
+        if (app.config.debug)
+            app.logger.debug(`try loading from "${file}"`);
 
         if (!(await exists(file))) {
             file = `${file}.md`;
@@ -140,8 +139,8 @@ function markdown (cfg, plugins, siteConfig) {
                 pop(context.meta, 'index');
             }
 
-            siteConfig.plugins.forEach(plugin => {
-                if (plugin.context) plugin.context(context, cfg, siteConfig);
+            app.config.plugins.forEach(plugin => {
+                if (plugin.context) plugin.context(app, context, cfg);
             });
 
             // generate table of contents if appropriate
@@ -151,7 +150,7 @@ function markdown (cfg, plugins, siteConfig) {
                 if (context.content.indexOf(TABLE_OF_CONTENTS_TOKEN) !== -1)
                     context.content = insertTableOfContents(context.content);
             }
-            if (!json) text = renderDoc(context, siteConfig);
+            if (!json) text = renderDoc(app, context);
             else {
                 res.setHeader('Content-Type', 'application/json');
                 text = JSON.stringify(context);
