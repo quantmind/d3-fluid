@@ -88,6 +88,6 @@
         "serve": "./bin/d3fluid",
         "postpublish": "VERSION=`node -e 'console.log(require(\"./package.json\").version)'`; git push && git tag -am \"Release $VERSION.\" v${VERSION} && git push --tags && mkdir -p ../giottojs.org/latest && mkdir -p ../giottojs.org/d3-view/${VERSION} && cp build/* ../giottojs.org/d3-view/${VERSION}/ && cp build/* ../giottojs.org/latest/ && cd ../giottojs.org && git add d3-view/${VERSION} latest && git commit -a -m \"d3-view ${VERSION}\" && git push",
         "release": "publish",
-        "prepare": "cp ./node_modules/navigo/lib/navigo.es.js components/router/navigo.js && cp ./node_modules/feather-icons/dist/icons.json components/icons/icons.json && rollup -c dev/rollup.config.js && view-require -c dev/require.config.js"
+        "prepare": "cp ./node_modules/navigo/lib/navigo.es.js components/router/navigo.js && cp ./node_modules/feather-icons/dist/icons.json components/icons/icons.json && rollup -c dev/rollup.config.js && view-require -c dev/require.config.js && npm run-script css"
     }
 }
