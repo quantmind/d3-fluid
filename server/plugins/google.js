@@ -14,9 +14,9 @@ function tpl(id) {
 
 //
 //  Add google analytics if required
-export default function (app, config) {
+export default app => {
 
-    if (config.google && config.google.analyticsId) {
-        config.bodyExtra.push(tpl(config.google.analyticsId));
+    if (app.config.google.analyticsId) {
+        app.config.bodyExtra.push(tpl(app.config.google.analyticsId));
     }
-}
+};

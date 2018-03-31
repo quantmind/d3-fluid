@@ -9,6 +9,8 @@ describe('Server', () => {
     test('meta', () => {
         const app = createApp();
         expect(app).toBeTruthy();
+        expect(app.config).toBeTruthy();
+        expect(app.config.name).toBe('d3-fluid');
     });
 
 
@@ -16,10 +18,5 @@ describe('Server', () => {
         const app = createApp();
         var response = await request(app).get('/');
         expect(response.statusCode).toBe(404);
-    });
-
-    test('no config', async () => {
-        const app = createApp('bjhbjhb');
-        expect(app).toBeTruthy();
     });
 });

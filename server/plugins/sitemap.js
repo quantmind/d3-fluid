@@ -2,7 +2,6 @@ import {createSitemap} from 'sitemap';
 import {readFileSync, writeFileSync, existsSync, readdirSync, lstatSync} from 'fs';
 import {join} from 'path';
 import glob from 'glob';
-import {viewProviders} from 'd3-view';
 
 import extractMetadata from '../utils/meta';
 import {resolve, clean} from '../utils/path';
@@ -14,14 +13,14 @@ const mdDefaults = {
 };
 
 
-export default function (app, siteConfig) {
+export default function (app) {
 
-    buildNavigations(siteConfig);
+    buildNavigations(app);
 
     app.get('/sitemap.xml', (req, res) => {
         res.set('Content-Type', 'application/xml');
 
-        sitemap(siteConfig, xml => {
+        sitemap(app, xml => {
             res.send(xml);
         });
     });
@@ -30,12 +29,12 @@ export default function (app, siteConfig) {
 
 //
 //  Build JSON files for site navigation
-function buildNavigations(siteConfig) {
-    var paths = siteConfig.markdown ? siteConfig.markdown.paths || [] : [];
+const buildNavigations = app => {
+    var paths = app.config.markdown ? app.config.markdown.paths || [] : [];
 
     paths.forEach(cfg => {
         cfg.meta = Object.assign({}, mdDefaults, cfg.meta);
-        cfg.meta.path = resolve(siteConfig.path, cfg.meta.path);
+        cfg.meta.path = resolve(app.config.path, cfg.meta.path);
         const index = cfg.meta.index || 'readme',
             nav = [];
 
@@ -67,17 +66,17 @@ function buildNavigations(siteConfig) {
 
         writeFileSync(`${cfg.meta.path}nav.json`, JSON.stringify(nav, null, 4));
     });
-}
+};
 
-function sitemap (siteConfig, callback) {
-    const logger = viewProviders.logger;
-    var paths = siteConfig.markdown ? siteConfig.markdown.paths || [] : [];
-    logger.info('sitemap triggered');
+
+const sitemap = (app, callback) => {
+    var paths = app.config.markdown ? app.config.markdown.paths || [] : [];
+    app.logger.info('sitemap triggered');
     let urls = [];
 
     paths.forEach(cfg => {
-        var path = resolve(siteConfig.path, cfg.meta.path);
-        logger.debug(path);
+        var path = resolve(app.config.path, cfg.meta.path);
+        app.logger.debug(path);
         let files = glob.sync(path + '*.md'),
             url;
 
@@ -85,8 +84,8 @@ function sitemap (siteConfig, callback) {
             file = file.substring(path.length, file.length-3);
             if (file === 'index') file = '';
             url = "/" + cfg.meta.slug + "/" + file;
-            url = siteConfig.baseUrl + url.replace(/^\/+/, '/');
-            logger.debug(url);
+            url = app.config.baseUrl + url.replace(/^\/+/, '/');
+            app.logger.debug(url);
             urls.push({
                 url,
                 changefreq: 'weekly',
@@ -96,16 +95,16 @@ function sitemap (siteConfig, callback) {
     });
 
     const sm = createSitemap({
-        hostname: siteConfig.url,
+        hostname: app.config.url,
         cacheTime: 600 * 1000, // 600 sec - cache purge period
         urls: urls,
     });
 
     sm.toXML((err, xml) => {
         if (err) {
-            logger.error(err);
+            app.logger.error(err);
             callback('An error has occured.');
         }
         callback(xml);
     });
-}
+};

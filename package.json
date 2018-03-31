@@ -17,7 +17,7 @@
         "url": "https://github.com/quantmind/d3-fluid.git"
     },
     "engines": {
-        "node": ">= 6.0"
+        "node": ">= 8.0"
     },
     "main": "build/d3-fluid.js",
     "module": "app/index",
@@ -27,6 +27,7 @@
     },
     "dependencies": {
         "commander": "2.15",
+        "debug": "3.1",
         "d3-ease": "1.0",
         "d3-transition": "1.1",
         "d3-view": "1.4",
@@ -42,6 +43,7 @@
         "marked": "~0.3.9",
         "mime-types": "2.1",
         "morgan": "1.9",
+        "oclif": "1.7",
         "sitemap": "1.13",
         "tcp-port-used": "0.1"
     },
@@ -86,6 +88,6 @@
         "serve": "./bin/d3fluid",
         "postpublish": "VERSION=`node -e 'console.log(require(\"./package.json\").version)'`; git push && git tag -am \"Release $VERSION.\" v${VERSION} && git push --tags && mkdir -p ../giottojs.org/latest && mkdir -p ../giottojs.org/d3-view/${VERSION} && cp build/* ../giottojs.org/d3-view/${VERSION}/ && cp build/* ../giottojs.org/latest/ && cd ../giottojs.org && git add d3-view/${VERSION} latest && git commit -a -m \"d3-view ${VERSION}\" && git push",
         "release": "publish",
-        "prepare": "cp ./node_modules/navigo/lib/navigo.es.js components/router/navigo.js && cp ./node_modules/feather-icons/dist/icons.json components/icons/icons.json && rollup -c dev/rollup.config.js && view-require -c dev/require.config.js"
+        "prepare": "cp ./node_modules/navigo/lib/navigo.es.js components/router/navigo.js && cp ./node_modules/feather-icons/dist/icons.json components/icons/icons.json && rollup -c dev/rollup.config.js && view-require -c dev/require.config.js && npm run-script css"
     }
 }

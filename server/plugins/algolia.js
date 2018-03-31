@@ -1,10 +1,7 @@
-import {viewProviders} from 'd3-view';
 
-
-export default function (app, config) {
-    if (!config.algolia) return;
-    if (!config.algolia.apiKey) {
-        viewProviders.logger.warn('algolia apiKey not available');
+export default function (app) {
+    if (!app.config.algolia.apiKey) {
+        app.logger.error('algolia apiKey not available');
         return;
     }
 }

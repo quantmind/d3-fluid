@@ -1,4 +1,4 @@
 
-export default function (app, config) {
-    if (!config.icons) return;
+export default function (app) {
+    if (!app.config.icons) return;
 }

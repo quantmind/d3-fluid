@@ -1,15 +1,17 @@
 import {existsSync} from 'fs';
 import {dirname} from 'path';
-import {viewProviders} from 'd3-view';
 
-import debug from '../utils/debug';
+import getLogger from './logger';
+import {name} from '../../package.json';
 
 
 const CWD = process.cwd();
 
 
 const defaults = {
-    env: process.env.NODE_ENV || 'dev',
+    name,
+    env: process.env.NODE_ENV || 'production',
+    sitemap: true,
     static: ['static'],
     scripts: ['/static/site.js'],
     bodyExtra: [],
@@ -17,14 +19,14 @@ const defaults = {
 };
 
 
-export default function (file) {
+export default file => {
     let cfg = {},
         path;
 
     if (file) {
         const filePath = `${CWD}/${file}`;
         if (!existsSync(filePath))
-            viewProviders.logger.warn(`No ${file} file found in website folder!`);
+            getLogger(name).error(`No ${file} file found in website folder!`);
         else {
             path = dirname(filePath);
             cfg = require(filePath);
@@ -33,7 +35,5 @@ export default function (file) {
 
     if (!path) path = CWD;
 
-    const config = Object.assign({}, defaults, cfg, {path});
-    debug(config);
-    return config;
-}
+    return Object.assign({}, defaults, cfg, {path});
+};

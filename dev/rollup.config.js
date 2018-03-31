@@ -7,7 +7,7 @@ import uglify from 'rollup-plugin-uglify';
 
 import {dependencies} from '../package.json';
 
-const externals = Object.keys(dependencies).concat(['fs', 'path', 'console', 'd3-let']);
+const externals = Object.keys(dependencies).concat(['fs', 'path', 'console', 'debug', 'd3-let']);
 const externalsCli = ['d3-dispatch', 'd3-ease', 'd3-selection', 'd3-timer', 'd3-transition', 'handlebars'];
 const externalsComponent = externalsCli.concat(['d3-let', 'd3-view']);
 const externalsApp = externalsCli.concat(['d3-view']);
@@ -43,6 +43,18 @@ const bundle = (entry, file, externals, min) => {
 
 
 export default [
+    {
+        input: 'server/api.js',
+        external: externals,
+        output: {
+            file: 'build/d3-fluid-server.js',
+            sourcemap: true,
+            format: 'cjs'
+        },
+        plugins: [
+            json()
+        ]
+    },
     {
         input: 'server/index.js',
         external: externals,
