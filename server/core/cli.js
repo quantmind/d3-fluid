@@ -1,5 +1,6 @@
 import program from 'commander';
 import tcpPortUsed from 'tcp-port-used';
+import dotenv from 'dotenv';
 
 import {version} from '../../package.json';
 
@@ -7,10 +8,11 @@ import createApp from './app';
 
 
 export default config => {
+    dotenv.config();
 
     config = Object.assign({
         version,
-        configFile: 'siteConfig.js',
+        configFile: process.env.D3_FLUID_CONFIG || 'siteConfig.js',
         plugins: [serve]
     }, config);
 
@@ -30,7 +32,7 @@ export default config => {
 export const serve = config => {
 
     config = Object.assign({
-        port: 9020
+        port: +(process.env.D3_FLUID_PORT || 9020)
     }, config);
 
     program

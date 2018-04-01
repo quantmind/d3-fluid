@@ -1,5 +1,5 @@
 {
-    "version": "0.3.0",
+    "version": "0.3.1",
     "name": "d3-fluid",
     "title": "d3-fluid - micro web framework with d3-view and express",
     "description": "Micro web framework with d3-view and express",
@@ -28,6 +28,7 @@
     "dependencies": {
         "commander": "2.15",
         "debug": "3.1",
+        "dotenv": "5.0",
         "d3-ease": "1.0",
         "d3-transition": "1.1",
         "d3-view": "1.4",
