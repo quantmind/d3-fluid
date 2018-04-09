@@ -2,14 +2,14 @@ import {existsSync} from 'fs';
 import {dirname} from 'path';
 
 import getLogger from './logger';
-import {name} from '../../package.json';
 
 
 const CWD = process.cwd();
-
+const packagePath = `${CWD}/package.json`;
+const pkg = existsSync(packagePath) ? require(packagePath) : require('../../package.json');
 
 const defaults = {
-    name,
+    name: pkg.name,
     env: process.env.NODE_ENV || 'production',
     sitemap: true,
     static: ['static'],
